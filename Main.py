@@ -1,5 +1,4 @@
 from tkinter import *
-
 from ScreenBlockerMenu import ScreenBlockerMenu
 
 root = Tk()

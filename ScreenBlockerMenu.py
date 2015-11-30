@@ -1,16 +1,31 @@
-from tkinter import Frame, Button, LEFT
-
+from tkinter import *
 
 class ScreenBlockerMenu(object):
-    def __init__(self, master):
-        frame = Frame(master)
-        frame.pack()
+    def __init__(self, master, **kwargs):
+        self.master=master
+        pad=0
+        self._geom='200x200+0+0'
+        master.geometry(self.get_current_window_geomitry(master, pad))
+        master.bind('<Escape>',self.toggle_geom)
+        self.set_always_on_top(master)
+        self.remove_title_bar(master)
+        self.disable_resizing(master)
 
-        self.print_button = Button(frame, text="Print Message", command=self.print_message)
-        self.print_button.pack(side=LEFT)
+    def get_current_window_geomitry(self, master, pad):
+        return "{0}x{1}+0+0".format(
+            master.winfo_screenwidth() - pad, master.winfo_screenheight() - pad)
 
-        self.quitButton = Button(frame, text="Quit", command=frame.quit)
-        self.quitButton.pack(side=LEFT)
+    def disable_resizing(self, master):
+        master.resizable(0, 0)
 
-    def print_message(self):
-        print("Hello World")
+    def remove_title_bar(self, master):
+        master.overrideredirect(1)
+
+    def set_always_on_top(self, master):
+        master.wm_attributes("-topmost", 1)
+
+    def toggle_geom(self,event):
+        geom=self.master.winfo_geometry()
+        print(geom,self._geom)
+        self.master.geometry(self._geom)
+        self._geom=geom
