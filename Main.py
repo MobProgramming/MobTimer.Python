@@ -1,5 +1,6 @@
 from tkinter import *
-from ScreenBlockerMenu import ScreenBlockerMenu
+
+from forms.ScreenBlockerMenu import ScreenBlockerMenu
 
 root = Tk()
 
