@@ -25,6 +25,7 @@ class TimeOptionsManager(object):
 
     def subscribe_to_timechange(self, time_change_callback):
         self.time_change_callbacks.append(time_change_callback)
+        self.fire_time_change_callbacks()
 
     def fire_time_change_callbacks(self):
         for time_change_callback in self.time_change_callbacks:

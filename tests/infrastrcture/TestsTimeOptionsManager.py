@@ -1,0 +1,94 @@
+import unittest
+
+from infrastructure.TimeOptionsManager import TimeOptionsManager
+
+
+class TestsTimeOptionsManager(unittest.TestCase):
+    def test_default_time_10_minutes(self):
+        time_options_manager = TimeOptionsManager()
+        result = time_options_manager.get_time_string()
+        self.assertEqual(result, "10:00")
+
+    def test_indement_minutes_once_is_11_minutes(self):
+        time_options_manager = TimeOptionsManager()
+        time_options_manager.increment_minutes()
+        result = time_options_manager.get_time_string()
+        self.assertEqual(result, "11:00")
+
+    def test_decriment_minutes_once_is_9_minutes(self):
+        time_options_manager = TimeOptionsManager()
+        time_options_manager.decrement_minutes()
+        result = time_options_manager.get_time_string()
+        self.assertEqual(result, "09:00")
+
+    def test_increment_seconds_once_is_10_minutes_15_seconds(self):
+        time_options_manager = TimeOptionsManager()
+        time_options_manager.increment_seconds()
+        result = time_options_manager.get_time_string()
+        self.assertEqual(result, "10:15")
+
+    def test_increment_seconds_4_times_is_10_minutes(self):
+        time_options_manager = TimeOptionsManager()
+        time_options_manager.increment_seconds()
+        time_options_manager.increment_seconds()
+        time_options_manager.increment_seconds()
+        time_options_manager.increment_seconds()
+        result = time_options_manager.get_time_string()
+        self.assertEqual(result, "10:00")
+
+    def test_decrement_seconds_once_is_10_minutes_45_seconds(self):
+        time_options_manager = TimeOptionsManager()
+        time_options_manager.decrement_seconds()
+        result = time_options_manager.get_time_string()
+        self.assertEqual(result, "10:45")
+
+    def test_decrement_seconds_3_times_is_10_minutes_45_seconds(self):
+        time_options_manager = TimeOptionsManager()
+        time_options_manager.decrement_seconds()
+        time_options_manager.decrement_seconds()
+        time_options_manager.decrement_seconds()
+        result = time_options_manager.get_time_string()
+        self.assertEqual(result, "10:15")
+
+    def test_subscribe_to_time_changes(self):
+        time_options_manager = TimeOptionsManager()
+        result = { "result" : "time"}
+
+        def time_change_callback(time, minutes,seconds):
+            result["result"] += " " + time
+
+        time_options_manager.subscribe_to_timechange(time_change_callback)
+
+        time_options_manager.increment_seconds()
+
+        self.assertEqual(result["result"], "time 10:15")
+
+    def test_subscribe_to_time_changes_complex(self):
+        time_options_manager = TimeOptionsManager()
+        result = { "result" : "time"}
+
+        def time_change_callback(time, minutes,seconds):
+            result["result"] += " " + time
+
+        time_options_manager.subscribe_to_timechange(time_change_callback)
+
+        time_options_manager.increment_seconds()
+        time_options_manager.increment_seconds()
+        time_options_manager.increment_seconds()
+        time_options_manager.decrement_seconds()
+        time_options_manager.decrement_seconds()
+        time_options_manager.decrement_seconds()
+        time_options_manager.decrement_seconds()
+        time_options_manager.decrement_minutes()
+        time_options_manager.decrement_minutes()
+        time_options_manager.increment_minutes()
+        time_options_manager.increment_minutes()
+        time_options_manager.increment_minutes()
+        time_options_manager.increment_minutes()
+        time_options_manager.increment_minutes()
+
+        self.assertEqual(result["result"], "time 10:15 10:30 10:45 10:30 10:15 10:00 10:45 09:45 08:45 09:45 10:45 11:45 12:45 13:45")
+
+
+if __name__ == '__main__':
+    unittest.main()

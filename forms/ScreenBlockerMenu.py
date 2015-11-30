@@ -9,14 +9,15 @@ class ScreenBlockerMenu(Frame):
         self._geom = '200x200+0+0'
 
         self.time_options_manager = time_options_manager
-        self.time_options_manager.subscribe_to_timechange(self.time_change_callback)
         self.set_window_properties(master, pad)
         self.build_window_content(master)
+        self.time_options_manager.subscribe_to_timechange(self.time_change_callback)
 
     def time_change_callback(self, time, minutes, seconds):
         print(time)
         print(minutes)
-        self.label_minutes['text'] = minutes
+        self.label_minutes['text'] = "{0:0>2}".format(minutes)
+        self.label_seconds['text'] = "{0:0>2}".format(seconds)
 
     def set_window_properties(self, master, pad):
         master.geometry(self.get_current_window_geomitry(master, pad))
@@ -64,8 +65,10 @@ class ScreenBlockerMenu(Frame):
         label_colon = Label(center_frame, text=":", font="Helvetica 180 bold")
         label_colon.grid(row=row_index, column=1, sticky=N)
 
-        label_seconds = Label(center_frame, text="30", font="Helvetica 180 bold")
-        label_seconds.grid(row=row_index, column=2, sticky=W)
+        self.label_seconds = Label(center_frame, text="30", font="Helvetica 180 bold")
+        self.label_seconds.grid(row=row_index, column=2, sticky=W)
+        self.label_seconds.bind("<Button-1>", lambda event: self.time_options_manager.increment_seconds())
+        self.label_seconds.bind("<Button-3>", lambda event: self.time_options_manager.decrement_seconds())
         row_index += 1
 
         label_up_next = Label(center_frame, text="Mobber Sit At the Keyboard", font="Helvetica 50 bold")
