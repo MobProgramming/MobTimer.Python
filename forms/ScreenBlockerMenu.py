@@ -14,8 +14,6 @@ class ScreenBlockerMenu(Frame):
         self.time_options_manager.subscribe_to_timechange(self.time_change_callback)
 
     def time_change_callback(self, time, minutes, seconds):
-        print(time)
-        print(minutes)
         self.label_minutes['text'] = "{0:0>2}".format(minutes)
         self.label_seconds['text'] = "{0:0>2}".format(seconds)
 
