@@ -1,15 +1,20 @@
+import os
 import unittest
+from approvaltests import Approvals
+from approvaltests.TextDiffReporter import TextDiffReporter
 
 
 class MobberManager(object):
     def __init__(self):
         self.mobber_list = []
+        self.mobber_list_change_callbacks = []
 
     def mobber_count(self):
         return self.mobber_list.__len__()
 
     def add_mobber(self, mobber_name):
         self.mobber_list.append(mobber_name)
+        self.fire_time_change_callbacks()
 
     def get_mobbers(self):
         return self.mobber_list
@@ -17,19 +22,30 @@ class MobberManager(object):
     def remove_mobber(self, remove_mobber_index):
         if self.mobber_count() == 0: return
         del self.mobber_list[remove_mobber_index]
+        self.fire_time_change_callbacks()
 
     def move_mobber_up(self, swap_index):
         if self.mobber_count() == 0: return
         destination_index = swap_index - 1
         self.mobber_list[swap_index], self.mobber_list[destination_index] = self.mobber_list[destination_index], \
                                                                             self.mobber_list[swap_index]
+        self.fire_time_change_callbacks()
 
     def move_mobber_down(self, swap_index):
         if self.mobber_count() == 0: return
         destination_index = (swap_index + 1) % self.mobber_list.__len__()
         self.mobber_list[swap_index], self.mobber_list[destination_index] = self.mobber_list[destination_index], \
                                                                             self.mobber_list[swap_index]
+        self.fire_time_change_callbacks()
 
+    def subscribe_to_mobber_list_change(self, mobber_list_change_callback):
+        self.mobber_list_change_callbacks.append(mobber_list_change_callback)
+        self.fire_time_change_callbacks()
+
+    def fire_time_change_callbacks(self):
+        for mobber_list_change_callback in self.mobber_list_change_callbacks:
+            if mobber_list_change_callback:
+                mobber_list_change_callback(self.mobber_list)
 
 class TestsMobberManager(unittest.TestCase):
     def test_empty_mobber_manager_has_no_items(self):
@@ -118,13 +134,14 @@ class TestsMobberManager(unittest.TestCase):
 
     def test_subscribe_to_mobber_list_changes(self):
         mobber_manager = MobberManager()
-        result = { "result" : "Contents:"}
+        result = { "result" : "Mobbers in List for Each Change\n", "increment" : 0}
 
         def time_change_callback(mobber_list):
-            result["result"] += " ["
+            result["increment"] += 1
+            result["result"] += "Action " + result["increment"].__str__()  + ":"
             for mobber in mobber_list:
                 result["result"] += mobber + ","
-            result["result"] += "], "
+            result["result"] += "\n"
 
         mobber_manager.subscribe_to_mobber_list_change(time_change_callback)
 
@@ -132,9 +149,17 @@ class TestsMobberManager(unittest.TestCase):
         mobber_manager.add_mobber("Chris")
         mobber_manager.add_mobber("Sam")
         mobber_manager.remove_mobber(2)
+        mobber_manager.remove_mobber(0)
+        mobber_manager.add_mobber("Seth")
+        mobber_manager.move_mobber_down(0)
+        mobber_manager.add_mobber("Fredrick")
+        mobber_manager.move_mobber_up(2)
+        mobber_manager.remove_mobber(1)
+        mobber_manager.remove_mobber(0)
+        mobber_manager.remove_mobber(0)
 
-        self.assertEqual(result["result"], "Contents:[], [Joe,], [Joe,Chris,], [Joe,Chris,Sam,], [Joe,Chris,]")
-
+        Approvals.verify(result["result"], TextDiffReporter())
 
 if __name__ == '__main__':
+    os.environ["APPROVALS_TEXT_DIFF_TOOL"] = "meld"
     unittest.main()

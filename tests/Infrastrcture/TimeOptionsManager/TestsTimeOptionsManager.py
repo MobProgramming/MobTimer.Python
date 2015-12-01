@@ -1,6 +1,10 @@
+import os
 import unittest
 
-from infrastructure.TimeOptionsManager import TimeOptionsManager
+from approvaltests import Approvals
+from approvaltests.TextDiffReporter import TextDiffReporter
+
+from Infrastructure.TimeOptionsManager import TimeOptionsManager
 
 
 class TestsTimeOptionsManager(unittest.TestCase):
@@ -65,10 +69,11 @@ class TestsTimeOptionsManager(unittest.TestCase):
 
     def test_subscribe_to_time_changes_complex(self):
         time_options_manager = TimeOptionsManager()
-        result = {"result": "time"}
+        result = {"result": "Time Options after Change:", "increment" : 0}
 
         def time_change_callback(time, minutes, seconds):
-            result["result"] += " " + time
+            result["increment"] += 1
+            result["result"] += "\n Change " + result["increment"].__str__() + "| " + time
 
         time_options_manager.subscribe_to_timechange(time_change_callback)
 
@@ -87,9 +92,8 @@ class TestsTimeOptionsManager(unittest.TestCase):
         time_options_manager.increment_minutes()
         time_options_manager.increment_minutes()
 
-        self.assertEqual(result["result"],
-                         "time 10:00 10:15 10:30 10:45 10:30 10:15 10:00 10:45 09:45 08:45 09:45 10:45 11:45 12:45 13:45")
-
+        Approvals.verify(result["result"], TextDiffReporter())
 
 if __name__ == '__main__':
+    os.environ["APPROVALS_TEXT_DIFF_TOOL"] = "meld"
     unittest.main()
