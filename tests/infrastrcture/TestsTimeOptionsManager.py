@@ -52,22 +52,22 @@ class TestsTimeOptionsManager(unittest.TestCase):
 
     def test_subscribe_to_time_changes(self):
         time_options_manager = TimeOptionsManager()
-        result = { "result" : "time"}
+        result = {"result": "time"}
 
-        def time_change_callback(time, minutes,seconds):
+        def time_change_callback(time, minutes, seconds):
             result["result"] += " " + time
 
         time_options_manager.subscribe_to_timechange(time_change_callback)
 
         time_options_manager.increment_seconds()
 
-        self.assertEqual(result["result"], "time 10:15")
+        self.assertEqual(result["result"], "time 10:00 10:15")
 
     def test_subscribe_to_time_changes_complex(self):
         time_options_manager = TimeOptionsManager()
-        result = { "result" : "time"}
+        result = {"result": "time"}
 
-        def time_change_callback(time, minutes,seconds):
+        def time_change_callback(time, minutes, seconds):
             result["result"] += " " + time
 
         time_options_manager.subscribe_to_timechange(time_change_callback)
@@ -87,7 +87,8 @@ class TestsTimeOptionsManager(unittest.TestCase):
         time_options_manager.increment_minutes()
         time_options_manager.increment_minutes()
 
-        self.assertEqual(result["result"], "time 10:15 10:30 10:45 10:30 10:15 10:00 10:45 09:45 08:45 09:45 10:45 11:45 12:45 13:45")
+        self.assertEqual(result["result"],
+                         "time 10:00 10:15 10:30 10:45 10:30 10:15 10:00 10:45 09:45 08:45 09:45 10:45 11:45 12:45 13:45")
 
 
 if __name__ == '__main__':
