@@ -1,11 +1,13 @@
 from tkinter import *
 
+from Infrastructure.MobberManager import MobberManager
 from forms.ScreenBlockerMenu import ScreenBlockerMenu
-from infrastructure.TimeOptionsManager import TimeOptionsManager
+from Infrastructure.TimeOptionsManager import TimeOptionsManager
 
 root = Tk()
 
-time_optons_manager = TimeOptionsManager()
-screen_blocker_menu = ScreenBlockerMenu(root, time_optons_manager)
+time_options_manager = TimeOptionsManager()
+mobber_manager = MobberManager()
+screen_blocker_menu = ScreenBlockerMenu(root, time_options_manager, mobber_manager)
 
 root.mainloop()

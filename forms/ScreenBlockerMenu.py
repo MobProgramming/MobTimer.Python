@@ -2,16 +2,24 @@ from tkinter import *
 
 
 class ScreenBlockerMenu(Frame):
-    def __init__(self, master, time_options_manager, **kwargs):
+    def __init__(self, master, time_options_manager, mobber_manager, **kwargs):
         super().__init__(master, **kwargs)
         self.master = master
+
         pad = 0
         self._geom = '200x200+0+0'
 
         self.time_options_manager = time_options_manager
+        self.mobber_manager = mobber_manager
         self.set_window_properties(master, pad)
         self.build_window_content(master)
         self.time_options_manager.subscribe_to_timechange(self.time_change_callback)
+        self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
+
+    def mobber_list_change_callback(self, mobber_list):
+        self.names_list.delete(0, END)
+        for name in mobber_list:
+            self.names_list.insert(END, name)
 
     def time_change_callback(self, time, minutes, seconds):
         self.label_minutes['text'] = "{0:0>2}".format(minutes)
@@ -77,30 +85,35 @@ class ScreenBlockerMenu(Frame):
         label_up_next.grid(row=row_index, columnspan=3, padx=30, pady=0, sticky=N)
         row_index += 1
 
-        add_mobber_label = Entry(center_frame, text="Add Mobber")
-        add_mobber_label.grid(row=row_index, columnspan=2, sticky=N + E + W, padx=10, pady=10)
+        add_mobber_entry = Entry(center_frame, text="Add Mobber")
+        add_mobber_entry.grid(row=row_index, columnspan=2, sticky=N + E + W, padx=10, pady=10)
 
         add_mobber_button = Button(center_frame, text="Add Mobber")
         add_mobber_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
+        add_mobber_button.bind("<Button-1>", lambda event: self.mobber_manager.add_mobber(add_mobber_entry.get()))
         row_index += 1
 
-        names_list = Listbox(center_frame)
-        names_list.grid(row=row_index, rowspan=4, columnspan=2, column=0, padx=10, pady=10, sticky=N + E + W)
+        self.names_list = Listbox(center_frame)
+        self.names_list.grid(row=row_index, rowspan=4, columnspan=2, column=0, padx=10, pady=10, sticky=N + E + W)
 
         remove_mobber_button = Button(center_frame, text="Remove Mobber")
         remove_mobber_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
+        remove_mobber_button.bind("<Button-1>", lambda event: self.mobber_manager.remove_mobber(int(self.names_list.curselection()[0])))
         row_index += 1
 
         move_mobber_up_button = Button(center_frame, text="Move Mobber Up")
         move_mobber_up_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
+        move_mobber_up_button.bind("<Button-1>", lambda event: self.mobber_manager.move_mobber_up(int(self.names_list.curselection()[0])))
         row_index += 1
 
         move_mobber_down_button = Button(center_frame, text="Move Mobber Down")
         move_mobber_down_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
+        move_mobber_down_button.bind("<Button-1>", lambda event: self.mobber_manager.move_mobber_down(int(self.names_list.curselection()[0])))
         row_index += 1
 
         clear_mobbers_button = Button(center_frame, text="Clear Mobbers")
         clear_mobbers_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
+        clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.clear())
         row_index += 1
 
         start_button = Button(center_frame, text="Start Mobbing!", font="Helvetica 30 bold")
