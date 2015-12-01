@@ -18,7 +18,12 @@ class ScreenBlockerMenu(Frame):
 
     def mobber_list_change_callback(self, mobber_list):
         self.names_list.delete(0, END)
-        for name in mobber_list:
+        for index in range(0, mobber_list.__len__()):
+            name = mobber_list[index]
+            if index == 0:
+                name += " <= Driver"
+            if index == 1:
+                name += " <= Navigator"
             self.names_list.insert(END, name)
 
     def time_change_callback(self, time, minutes, seconds):
@@ -77,23 +82,24 @@ class ScreenBlockerMenu(Frame):
         self.label_seconds.bind("<Button-3>", lambda event: self.time_options_manager.decrement_seconds())
         row_index += 1
 
-        label_up_next = Label(center_frame, text="Mobber Sit At the Keyboard", font="Helvetica 50 bold")
-        label_up_next.grid(row=row_index, columnspan=3, padx=30, pady=0, sticky=N)
+        self.label_current_mobber = Label(center_frame, text="Mobber Sit At the Keyboard", font="Helvetica 50 bold")
+        self.label_current_mobber.grid(row=row_index, columnspan=3, padx=30, pady=0, sticky=N)
         row_index += 1
 
-        label_up_next = Label(center_frame, text="Next Mobber get ready!", font="Helvetica 16 bold")
-        label_up_next.grid(row=row_index, columnspan=3, padx=30, pady=0, sticky=N)
+        self.label_next_mobber = Label(center_frame, text="Next Mobber get ready!", font="Helvetica 16 bold")
+        self.label_next_mobber.grid(row=row_index, columnspan=3, padx=30, pady=0, sticky=N)
         row_index += 1
 
-        add_mobber_entry = Entry(center_frame, text="Add Mobber")
-        add_mobber_entry.grid(row=row_index, columnspan=2, sticky=N + E + W, padx=10, pady=10)
+        self.add_mobber_entry = Entry(center_frame, text="Add Mobber",font="Helvetica 16 bold")
+        self.add_mobber_entry.grid(row=row_index, columnspan=2, sticky=N + E + W, padx=10, pady=10)
+        self.add_mobber_entry.bind("<Return>", self.add_mobber_left_click)
 
         add_mobber_button = Button(center_frame, text="Add Mobber")
         add_mobber_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
-        add_mobber_button.bind("<Button-1>", lambda event: self.mobber_manager.add_mobber(add_mobber_entry.get()))
+        add_mobber_button.bind("<Button-1>", self.add_mobber_left_click)
         row_index += 1
 
-        self.names_list = Listbox(center_frame)
+        self.names_list = Listbox(center_frame, font="Helvetica 16 bold")
         self.names_list.grid(row=row_index, rowspan=4, columnspan=2, column=0, padx=10, pady=10, sticky=N + E + W)
 
         remove_mobber_button = Button(center_frame, text="Remove Mobber")
@@ -103,12 +109,12 @@ class ScreenBlockerMenu(Frame):
 
         move_mobber_up_button = Button(center_frame, text="Move Mobber Up")
         move_mobber_up_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
-        move_mobber_up_button.bind("<Button-1>", lambda event: self.mobber_manager.move_mobber_up(int(self.names_list.curselection()[0])))
+        move_mobber_up_button.bind("<Button-1>", self.move_mobber_up_left_click)
         row_index += 1
 
         move_mobber_down_button = Button(center_frame, text="Move Mobber Down")
         move_mobber_down_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
-        move_mobber_down_button.bind("<Button-1>", lambda event: self.mobber_manager.move_mobber_down(int(self.names_list.curselection()[0])))
+        move_mobber_down_button.bind("<Button-1>", self.move_mobber_down_left_click)
         row_index += 1
 
         clear_mobbers_button = Button(center_frame, text="Clear Mobbers")
@@ -121,3 +127,18 @@ class ScreenBlockerMenu(Frame):
         row_index += 1
 
         center_frame.pack(anchor=CENTER, pady=60)
+
+    def move_mobber_down_left_click(self,event):
+        selected_index = int(self.names_list.curselection()[0])
+        self.mobber_manager.move_mobber_down(selected_index)
+        self.names_list.select_set((selected_index + 1)% self.mobber_manager.mobber_count())
+
+    def move_mobber_up_left_click(self,event):
+        selected_index = int(self.names_list.curselection()[0])
+        self.mobber_manager.move_mobber_up(selected_index)
+        count = self.mobber_manager.mobber_count()
+        self.names_list.select_set((count + selected_index - 1) % count)
+
+    def add_mobber_left_click(self, event):
+        self.mobber_manager.add_mobber(self.add_mobber_entry.get())
+        self.add_mobber_entry.delete(0,END)
