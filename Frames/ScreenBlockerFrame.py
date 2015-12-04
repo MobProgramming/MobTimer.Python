@@ -8,11 +8,9 @@ class ScreenBlockerFrame(Frame):
         super().__init__(parent,**kwargs)
         self.controller = controller
 
-        self._geom = '200x200+0+0'
 
         self.time_options_manager = time_options_manager
         self.mobber_manager = mobber_manager
-        self.set_window_properties(controller)
         self.build_window_content()
         self.time_options_manager.subscribe_to_timechange(self.time_change_callback)
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
@@ -30,26 +28,6 @@ class ScreenBlockerFrame(Frame):
     def time_change_callback(self, time, minutes, seconds):
         self.label_minutes['text'] = "{0:0>2}".format(minutes)
         self.label_seconds['text'] = "{0:0>2}".format(seconds)
-
-    def set_window_properties(self, controller):
-        controller.geometry(self.get_current_window_geomitry(controller, 0))
-        controller.bind('<Escape>', self.toggle_geometry)
-        self.set_always_on_top(controller)
-        self.remove_title_bar(controller)
-        self.disable_resizing(controller)
-
-    def get_current_window_geomitry(self, master, pad):
-        return "{0}x{1}+0+0".format(
-            master.winfo_screenwidth() - pad, master.winfo_screenheight() - pad)
-
-    def disable_resizing(self, master):
-        master.resizable(0, 0)
-
-    def remove_title_bar(self, master):
-        master.overrideredirect(1)
-
-    def set_always_on_top(self, master):
-        master.wm_attributes("-topmost", 1)
 
     def toggle_geometry(self, event):
         geom = self.controller.winfo_geometry()
