@@ -37,9 +37,9 @@ class MobTimerController(Tk):
         self.show_frame(TransparentCountdownFrame)
         self.set_partial_screen_transparent()
 
-    def get_current_window_geometry(self, pad):
+    def get_current_window_geometry(self):
         return "{0}x{1}+0+0".format(
-            self.winfo_screenwidth() - pad, self.winfo_screenheight() - pad)
+            self.winfo_screenwidth(), self.winfo_screenheight())
 
     def disable_resizing(self):
         self.resizable(0, 0)
@@ -52,17 +52,28 @@ class MobTimerController(Tk):
 
     def set_full_screen_always_on_top(self):
         controller = self
-        controller.geometry(self.get_current_window_geometry(0))
-        # controller.bind('<Escape>', self.toggle_geometry)
+        controller.geometry(self.get_current_window_geometry())
+        self.set_always_on_top()
+        self.remove_title_bar()
+        self.disable_resizing()
+        top_left_screen = "+0+0"
+        controller.geometry(top_left_screen)
+        controller.attributes("-alpha", 1)
+
+    def set_partial_screen_transparent(self):
+        screenwidth = self.winfo_screenwidth()
+        screenheight = self.winfo_screenheight()
+
+        controller = self
+
         self.set_always_on_top()
         self.remove_title_bar()
         self.disable_resizing()
 
-    def set_partial_screen_transparent(self):
-        geometry = '200x200+0+0'
-        controller = self
-        controller.geometry(geometry)
-        # controller.bind('<Escape>', self.toggle_geometry)
-        self.set_always_on_top()
-        self.remove_title_bar()
-        self.disable_resizing()
+        window_width = int(screenwidth * 0.3)
+        window_height = int(screenheight * 0.3)
+        window_size = "{0}x{1}+0+0".format(window_width, window_height)
+        bottom_left_screen = "+0+{}".format(screenheight - window_height)
+        controller.geometry(window_size)
+        controller.geometry(bottom_left_screen)
+        controller.attributes("-alpha", 0.3)
