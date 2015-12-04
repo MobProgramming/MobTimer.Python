@@ -73,7 +73,7 @@ class MobTimerController(Tk):
         window_width = int(screenwidth * 0.3)
         window_height = int(screenheight * 0.3)
         window_size = "{0}x{1}+0+0".format(window_width, window_height)
-        bottom_left_screen = "+0+{}".format(screenheight - window_height)
+        bottom_left_screen = "+{}+{}".format(screenwidth - window_width,screenheight - window_height)
         controller.geometry(window_size)
         controller.geometry(bottom_left_screen)
         controller.attributes("-alpha", 0.3)

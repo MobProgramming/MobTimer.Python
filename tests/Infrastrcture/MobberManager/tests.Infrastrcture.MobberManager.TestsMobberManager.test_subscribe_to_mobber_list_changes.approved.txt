@@ -1,9 +1,9 @@
 Mobbers in List for Each Change
 Action 1:
-Action 2:Joe,
-Action 3:Joe,Chris,
-Action 4:Joe,Chris,Sam,
-Action 5:Joe,Chris,
+Action 2:Smokey Joe,
+Action 3:Smokey Joe,Chris,
+Action 4:Smokey Joe,Chris,Sam,
+Action 5:Smokey Joe,Chris,
 Action 6:Chris,
 Action 7:Chris,Seth,
 Action 8:Seth,Chris,

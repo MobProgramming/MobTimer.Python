@@ -20,58 +20,58 @@ class TestsMobberManager(unittest.TestCase):
 
     def test_add_mobber_joe_chris_has_joe_chris(self):
         mobber_manager = MobberManager()
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.add_mobber("Chris")
-        result = ["Joe", "Chris"]
+        result = ["Smokey Joe", "Chris"]
         self.assertEqual(mobber_manager.get_mobbers(), result)
 
     def test_add_mobber_joe_chris_joe__remove_joe_has_joe_chris(self):
         mobber_manager = MobberManager()
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.add_mobber("Chris")
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.remove_mobber(2)
-        result = ["Joe", "Chris"]
+        result = ["Smokey Joe", "Chris"]
         self.assertEqual(mobber_manager.get_mobbers(), result)
 
     def test_add_4_mobbers_move_up_middle(self):
         mobber_manager = MobberManager()
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.add_mobber("Chris")
         mobber_manager.add_mobber("Will")
         mobber_manager.add_mobber("Eric")
         mobber_manager.move_mobber_up(2)
-        result = ["Joe", "Will", "Chris", "Eric"]
+        result = ["Smokey Joe", "Will", "Chris", "Eric"]
         self.assertEqual(mobber_manager.get_mobbers(), result)
 
     def test_add_4_mobbers_move_up_top(self):
         mobber_manager = MobberManager()
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.add_mobber("Chris")
         mobber_manager.add_mobber("Will")
         mobber_manager.add_mobber("Eric")
         mobber_manager.move_mobber_up(0)
-        result = ["Eric", "Chris", "Will", "Joe"]
+        result = ["Eric", "Chris", "Will", "Smokey Joe"]
         self.assertEqual(mobber_manager.get_mobbers(), result)
 
     def test_add_4_mobbers_move_down_middle(self):
         mobber_manager = MobberManager()
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.add_mobber("Chris")
         mobber_manager.add_mobber("Will")
         mobber_manager.add_mobber("Eric")
         mobber_manager.move_mobber_down(2)
-        result = ["Joe", "Chris", "Eric", "Will"]
+        result = ["Smokey Joe", "Chris", "Eric", "Will"]
         self.assertEqual(mobber_manager.get_mobbers(), result)
 
     def test_add_4_mobbers_move_down_bottom(self):
         mobber_manager = MobberManager()
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.add_mobber("Chris")
         mobber_manager.add_mobber("Will")
         mobber_manager.add_mobber("Eric")
         mobber_manager.move_mobber_down(3)
-        result = ["Eric", "Chris", "Will", "Joe"]
+        result = ["Eric", "Chris", "Will", "Smokey Joe"]
         self.assertEqual(mobber_manager.get_mobbers(), result)
 
     def test_move_down_empty(self):
@@ -94,7 +94,7 @@ class TestsMobberManager(unittest.TestCase):
 
     def test_clear(self):
         mobber_manager = MobberManager()
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.add_mobber("Chris")
         mobber_manager.add_mobber("Sam")
         mobber_manager.clear()
@@ -115,7 +115,7 @@ class TestsMobberManager(unittest.TestCase):
 
         mobber_manager.subscribe_to_mobber_list_change(time_change_callback)
 
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("Smokey Joe")
         mobber_manager.add_mobber("Chris")
         mobber_manager.add_mobber("Sam")
         mobber_manager.remove_mobber(2)
