@@ -13,13 +13,13 @@ class TestsTimeOptionsManager(unittest.TestCase):
         result = time_options_manager.get_time_string()
         self.assertEqual(result, "10:00")
 
-    def test_indement_minutes_once_is_11_minutes(self):
+    def test_increment_minutes_once_is_11_minutes(self):
         time_options_manager = TimeOptionsManager()
         time_options_manager.increment_minutes()
         result = time_options_manager.get_time_string()
         self.assertEqual(result, "11:00")
 
-    def test_decriment_minutes_once_is_9_minutes(self):
+    def test_decrement_minutes_once_is_9_minutes(self):
         time_options_manager = TimeOptionsManager()
         time_options_manager.decrement_minutes()
         result = time_options_manager.get_time_string()
