@@ -1,4 +1,5 @@
 from tkinter import *
+from Infrastructure.CountdownManager import CountdownManager
 from Infrastructure.MobberManager import MobberManager
 from Infrastructure.TimeOptionsManager import TimeOptionsManager
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
@@ -16,26 +17,33 @@ class MobTimerController(Tk):
 
         time_options_manager = TimeOptionsManager()
         mobber_manager = MobberManager()
+        countdown_manager = CountdownManager(container)
 
         self.frames = {}
         for F in (ScreenBlockerFrame, TransparentCountdownFrame):
-            frame = F(container, self, time_options_manager, mobber_manager)
+            frame = F(container, self, time_options_manager, mobber_manager, countdown_manager)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
-
+        self.last_frame = None
         self.show_screen_blocker_frame()
 
     def show_frame(self, frame_class):
-        frame = self.frames[frame_class]
-        frame.tkraise()
+        switched_frames = False
+        if self.last_frame != frame_class:
+            frame = self.frames[frame_class]
+            frame.tkraise()
+            print(frame_class)
+            switched_frames = True
+        self.last_frame = frame_class
+        return switched_frames
 
     def show_screen_blocker_frame(self):
-        self.set_full_screen_always_on_top()
-        self.show_frame(ScreenBlockerFrame)
+        if self.show_frame(ScreenBlockerFrame):
+            self.set_full_screen_always_on_top()
 
     def show_transparent_countdown_frame(self):
-        self.show_frame(TransparentCountdownFrame)
-        self.set_partial_screen_transparent()
+        if self.show_frame(TransparentCountdownFrame):
+            self.set_partial_screen_transparent()
 
     def get_current_window_geometry(self):
         return "{0}x{1}+0+0".format(
@@ -73,7 +81,7 @@ class MobTimerController(Tk):
         window_width = int(screenwidth * 0.3)
         window_height = int(screenheight * 0.3)
         window_size = "{0}x{1}+0+0".format(window_width, window_height)
-        bottom_left_screen = "+{}+{}".format(screenwidth - window_width,screenheight - window_height)
+        bottom_left_screen = "+{}+{}".format(screenwidth - window_width, screenheight - window_height)
         controller.geometry(window_size)
         controller.geometry(bottom_left_screen)
         controller.attributes("-alpha", 0.3)

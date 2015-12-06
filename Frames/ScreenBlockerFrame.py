@@ -1,14 +1,12 @@
 from tkinter import *
-
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
 
 
 class ScreenBlockerFrame(Frame):
-    def __init__(self, parent, controller, time_options_manager, mobber_manager, **kwargs):
-        super().__init__(parent,**kwargs)
+    def __init__(self, parent, controller, time_options_manager, mobber_manager, countdown_manager, **kwargs):
+        super().__init__(parent, **kwargs)
         self.controller = controller
-
-
+        self.countdown_manager = countdown_manager
         self.time_options_manager = time_options_manager
         self.mobber_manager = mobber_manager
         self.build_window_content()
@@ -110,6 +108,7 @@ class ScreenBlockerFrame(Frame):
         center_frame.pack(anchor=CENTER, pady=60)
 
     def launch_transparent_countdown(self, event):
+        self.countdown_manager.set_countdown_duration(self.time_options_manager.minutes, self.time_options_manager.seconds)
         self.controller.show_transparent_countdown_frame()
 
     def move_mobber_down_left_click(self, event):

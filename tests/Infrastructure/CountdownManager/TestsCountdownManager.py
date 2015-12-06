@@ -5,19 +5,10 @@ import unittest
 from approvaltests import Approvals
 from approvaltests.TextDiffReporter import TextDiffReporter
 
-from Infrastructure.CountdownManager.TestsCountdownManager import CountdownManager
+from Infrastructure.CountdownManager import CountdownManager
 
 
 class TestsCountdownManager(unittest.TestCase):
-    def test_time(self):
-        start_time = time.time()
-        time.sleep(2)
-        end_time = time.time()
-
-        uptime = end_time - start_time
-
-        self.assertEqual(datetime.timedelta(seconds=int(uptime)).__str__(), (
-            datetime.timedelta(seconds=15, minutes=1) - datetime.timedelta(seconds=(int(uptime)))).__str__())
 
     def test_set_countdown_timer(self):
         countdown_manager = CountdownManager(None)
@@ -34,7 +25,7 @@ class TestsCountdownManager(unittest.TestCase):
         countdown_manager = CountdownManager(None)
         result = {"result": "Times changed to\n", "increment": 0}
 
-        def time_change_callback(minutes, seconds):
+        def time_change_callback(days, minutes, seconds):
             result["increment"] += 1
             result["result"] += "Action " + result["increment"].__str__() + ":"
             result["result"] += "    {0:0>2}:{1:0>2}".format(minutes, seconds) + "\n"
