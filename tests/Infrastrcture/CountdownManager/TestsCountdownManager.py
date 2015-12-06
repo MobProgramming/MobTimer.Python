@@ -5,10 +5,13 @@ from approvaltests.TextDiffReporter import TextDiffReporter
 
 
 class CountdownManager(object):
-    def __init__(self):
+    def __init__(self, root_tk_app):
         self.minutes = 0
         self.seconds = 0
         self.time_change_callbacks = []
+
+        self.root_tk_app = root_tk_app
+        self.refresh_timer()
 
     def set_countdown_duration(self, minutes, seconds):
         self.minutes = minutes
@@ -23,21 +26,25 @@ class CountdownManager(object):
             if callback:
                 callback(self.minutes, self.seconds)
 
+    def refresh_timer(self):
+        if self.root_tk_app:
+            self.root_tk_app.after(1000, self.refresh_timer)
+
 
 class TestsCountdownManager(unittest.TestCase):
     def test_set_countdown_timer(self):
-        countdown_manager = CountdownManager()
+        countdown_manager = CountdownManager(None)
         countdown_manager.set_countdown_duration(5, 14)
         result = "{}:{}".format(countdown_manager.minutes, countdown_manager.seconds)
         self.assertEqual("5:14", result)
 
     def test_new_countdown_timer(self):
-        countdown_manager = CountdownManager()
+        countdown_manager = CountdownManager(None)
         result = "{}:{}".format(countdown_manager.minutes, countdown_manager.seconds)
         self.assertEqual("0:0", result)
 
     def test_subscribe_to_time_changes(self):
-        countdown_manager = CountdownManager()
+        countdown_manager = CountdownManager(None)
         result = {"result": "Times changed to\n", "increment": 0}
 
         def time_change_callback(minutes, seconds):
