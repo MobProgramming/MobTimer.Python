@@ -27,12 +27,11 @@ class CountdownManager(object):
         end_time = time.time()
         up_time = end_time - self.start_time
         remaining_time = self.count_down_total - datetime.timedelta(seconds=(int(up_time)))
-        print(remaining_time.days)
         for callback in self.time_change_callbacks:
             if callback:
                 callback(remaining_time.days, (remaining_time.seconds // 60) % 60, remaining_time.seconds % 60)
 
     def refresh_timer(self):
+        self.fire_time_change_callbacks()
         if self.root_tk_app:
-            self.fire_time_change_callbacks()
             self.root_tk_app.after(500, self.refresh_timer)

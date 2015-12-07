@@ -1,5 +1,7 @@
 class MobberManager(object):
     def __init__(self):
+        self.driver_index = 0
+        self.navigator_index = 1
         self.mobber_list = []
         self.mobber_list_change_callbacks = []
 
@@ -37,10 +39,26 @@ class MobberManager(object):
         self.fire_time_change_callbacks()
 
     def fire_time_change_callbacks(self):
+        self.update_navigator_driver_index()
         for mobber_list_change_callback in self.mobber_list_change_callbacks:
             if mobber_list_change_callback:
-                mobber_list_change_callback(self.mobber_list)
+                mobber_list_change_callback(self.mobber_list, self.driver_index, self.navigator_index)
 
     def clear(self):
         self.mobber_list = []
         self.fire_time_change_callbacks()
+
+    def switch_navigator_driver(self):
+        mobber_count = self.mobber_list.__len__()
+        if mobber_count > 0:
+            self.driver_index = (self.driver_index + 1) % mobber_count
+        self.update_navigator_driver_index()
+        self.fire_time_change_callbacks()
+
+    def update_navigator_driver_index(self):
+        if self.mobber_list.__len__() > 0:
+            self.driver_index = self.driver_index % self.mobber_list.__len__()
+            self.navigator_index =(self.driver_index + 1) % self.mobber_list.__len__()
+        else:
+            self.driver_index = 0
+            self.navigator_index = 1

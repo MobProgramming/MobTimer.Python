@@ -15,13 +15,13 @@ class MobTimerController(Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        time_options_manager = TimeOptionsManager()
-        mobber_manager = MobberManager()
-        countdown_manager = CountdownManager(container)
+        self.time_options_manager = TimeOptionsManager()
+        self.mobber_manager = MobberManager()
+        self.countdown_manager = CountdownManager(container)
 
         self.frames = {}
         for F in (ScreenBlockerFrame, TransparentCountdownFrame):
-            frame = F(container, self, time_options_manager, mobber_manager, countdown_manager)
+            frame = F(container, self, self.time_options_manager, self.mobber_manager, self.countdown_manager)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         self.last_frame = None
@@ -32,13 +32,13 @@ class MobTimerController(Tk):
         if self.last_frame != frame_class:
             frame = self.frames[frame_class]
             frame.tkraise()
-            print(frame_class)
             switched_frames = True
         self.last_frame = frame_class
         return switched_frames
 
     def show_screen_blocker_frame(self):
         if self.show_frame(ScreenBlockerFrame):
+            self.mobber_manager.switch_navigator_driver()
             self.set_full_screen_always_on_top()
 
     def show_transparent_countdown_frame(self):

@@ -13,13 +13,13 @@ class ScreenBlockerFrame(Frame):
         self.time_options_manager.subscribe_to_timechange(self.time_change_callback)
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
 
-    def mobber_list_change_callback(self, mobber_list):
+    def mobber_list_change_callback(self, mobber_list, driver_index, navigator_index ):
         self.names_list.delete(0, END)
         for index in range(0, mobber_list.__len__()):
             name = mobber_list[index]
-            if index == 0:
+            if index == driver_index:
                 name += " <= Driver"
-            if index == 1:
+            if index == navigator_index:
                 name += " <= Navigator"
             self.names_list.insert(END, name)
 
@@ -57,14 +57,6 @@ class ScreenBlockerFrame(Frame):
         self.label_seconds.grid(row=row_index, column=2, sticky=W)
         self.label_seconds.bind("<Button-1>", lambda event: self.time_options_manager.increment_seconds())
         self.label_seconds.bind("<Button-3>", lambda event: self.time_options_manager.decrement_seconds())
-        row_index += 1
-
-        self.label_current_mobber = Label(center_frame, text="Mobber Sit At the Keyboard", font="Helvetica 50 bold")
-        self.label_current_mobber.grid(row=row_index, columnspan=3, padx=30, pady=0, sticky=N)
-        row_index += 1
-
-        self.label_next_mobber = Label(center_frame, text="Next Mobber get ready!", font="Helvetica 16 bold")
-        self.label_next_mobber.grid(row=row_index, columnspan=3, padx=30, pady=0, sticky=N)
         row_index += 1
 
         self.add_mobber_entry = Entry(center_frame, text="Add Mobber", font="Helvetica 16 bold")
