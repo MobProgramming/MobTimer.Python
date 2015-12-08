@@ -18,9 +18,9 @@ class ScreenBlockerFrame(Frame):
         for index in range(0, mobber_list.__len__()):
             name = mobber_list[index]
             if index == driver_index:
-                name += " <= Driver"
+                name += " <= Current Driver"
             if index == navigator_index:
-                name += " <= Navigator"
+                name += " <= Next Driver"
             self.names_list.insert(END, name)
 
     def time_change_callback(self, time, minutes, seconds):
