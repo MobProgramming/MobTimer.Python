@@ -26,6 +26,8 @@ class MobTimerController(Tk):
             frame.grid(row=0, column=0, sticky="nsew")
         self.last_frame = None
         self.show_screen_blocker_frame()
+        self.frames[TransparentCountdownFrame].bind("<Enter>", self.toggle_transparent_frame_position)
+        self.transparent_frame_position = 0
 
     def show_frame(self, frame_class):
         switched_frames = False
@@ -66,6 +68,8 @@ class MobTimerController(Tk):
         self.disable_resizing()
         top_left_screen = "+0+0"
         controller.geometry(top_left_screen)
+
+        controller.wait_visibility(controller)
         controller.attributes("-alpha", 1)
 
     def set_partial_screen_transparent(self):
@@ -81,7 +85,27 @@ class MobTimerController(Tk):
         window_width = int(screenwidth * 0.3)
         window_height = int(screenheight * 0.3)
         window_size = "{0}x{1}+0+0".format(window_width, window_height)
-        bottom_left_screen = "+{}+{}".format(screenwidth - window_width, screenheight - window_height)
         controller.geometry(window_size)
-        controller.geometry(bottom_left_screen)
         controller.attributes("-alpha", 0.3)
+        self.toggle_transparent_frame_position()
+
+    def toggle_transparent_frame_position(self, e=None):
+        screenwidth = self.winfo_screenwidth()
+        screenheight = self.winfo_screenheight()
+
+        controller = self
+
+        self.set_always_on_top()
+        self.remove_title_bar()
+        self.disable_resizing()
+
+        window_width = int(screenwidth * 0.3)
+        window_height = int(screenheight * 0.3)
+
+        if self.transparent_frame_position == 0:
+            self.transparent_frame_position = screenwidth - window_width
+        else:
+            self.transparent_frame_position = 0
+
+        bottom_left_screen = "+{}+{}".format(self.transparent_frame_position, screenheight - window_height)
+        controller.geometry(bottom_left_screen)

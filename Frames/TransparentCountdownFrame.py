@@ -11,6 +11,7 @@ class TransparentCountdownFrame(Frame):
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
         countdown_manager.subscribe_to_time_changes(self.update_time_change_callback)
 
+
     def update_time_change_callback(self, days, minutes, seconds):
         if days< 0 or minutes < 0 or seconds < 0:
             self.controller.show_screen_blocker_frame()
@@ -38,14 +39,14 @@ class TransparentCountdownFrame(Frame):
         self.label_seconds.grid(row=row_index, column=2, sticky=W)
         row_index += 1
         self.label_driver = Label(self, text=self.get_driver_text(""), font="Helvetica 20 bold")
-        self.label_driver.grid(row=row_index, columnspan=3, sticky=W)
+        self.label_driver.grid(row=row_index, columnspan=3, sticky=E)
         row_index += 1
         self.label_navigator = Label(self, text=self.get_navigator_text(""), font="Helvetica 20 bold")
-        self.label_navigator.grid(row=row_index, columnspan=3, sticky=W)
+        self.label_navigator.grid(row=row_index, columnspan=3, sticky=E)
         row_index += 1
 
     def get_navigator_text(self,name ):
-        return "Navigator: " + name
+        return "Next Driver: " + name
 
     def get_driver_text(self, name):
-        return "Driver: " + name
+        return "Current Driver: " + name
