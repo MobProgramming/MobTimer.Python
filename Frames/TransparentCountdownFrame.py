@@ -1,15 +1,18 @@
 from tkinter import *
 
+from Frames.MobFrame import MobFrame
+
 
 class TransparentCountdownFrame(Frame):
-    def __init__(self, parent, controller, time_options_manager, mobber_manager, countdown_manager, **kwargs):
-        super().__init__(parent, **kwargs)
-        self.master = parent
+    def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, **kwargs):
+        super().__init__(master, **kwargs)
+        self.master = master
         self.controller = controller
         self.create_frame_content()
         self.mobber_manager = mobber_manager
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
         countdown_manager.subscribe_to_time_changes(self.update_time_change_callback)
+
 
 
     def update_time_change_callback(self, days, minutes, seconds):

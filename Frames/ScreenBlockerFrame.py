@@ -1,10 +1,12 @@
 from tkinter import *
-from Frames.TransparentCountdownFrame import TransparentCountdownFrame
+
+from Frames.MobFrame import MobFrame
 
 
 class ScreenBlockerFrame(Frame):
-    def __init__(self, parent, controller, time_options_manager, mobber_manager, countdown_manager, **kwargs):
-        super().__init__(parent, **kwargs)
+    def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, **kwargs):
+        super().__init__(master, **kwargs)
+        self.master = master
         self.controller = controller
         self.countdown_manager = countdown_manager
         self.time_options_manager = time_options_manager
@@ -12,6 +14,7 @@ class ScreenBlockerFrame(Frame):
         self.build_window_content()
         self.time_options_manager.subscribe_to_timechange(self.time_change_callback)
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
+
 
     def mobber_list_change_callback(self, mobber_list, driver_index, navigator_index ):
         self.names_list.delete(0, END)
@@ -34,7 +37,7 @@ class ScreenBlockerFrame(Frame):
         self._geom = geom
 
     def build_window_content(self):
-        center_frame = Frame(self)
+        center_frame = self
 
         row_index = 0
         title = Label(center_frame, text="Mobbing Timer", font="Helvetica 40 bold italic")
@@ -97,7 +100,7 @@ class ScreenBlockerFrame(Frame):
         start_button.bind("<Button-1>", self.launch_transparent_countdown)
         row_index += 1
 
-        center_frame.pack(anchor=CENTER, pady=60)
+        center_frame.grid(row=0, column=0, sticky="nsew")
 
     def launch_transparent_countdown(self, event):
         self.countdown_manager.set_countdown_duration(self.time_options_manager.minutes, self.time_options_manager.seconds)
