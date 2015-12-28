@@ -1,7 +1,5 @@
 from tkinter import *
 
-from Frames.MobFrame import MobFrame
-
 
 class ScreenBlockerFrame(Frame):
     def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, **kwargs):

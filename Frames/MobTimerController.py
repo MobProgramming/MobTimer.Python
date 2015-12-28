@@ -4,30 +4,36 @@ from Infrastructure.MobberManager import MobberManager
 from Infrastructure.TimeOptionsManager import TimeOptionsManager
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
+from screeninfo import *
 
 
 class MobTimerController(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
 
-
-
+        self.iconbitmap(default='C:\\Users\\Chris\\OneDrive\\Git\\Pycharm\\MobTimer\\time-bomb.ico')
         self.time_options_manager = TimeOptionsManager()
         self.mobber_manager = MobberManager()
         self.countdown_manager = CountdownManager(self)
 
-        self.containers = [self, Toplevel(self)]
+        monitors = get_monitors()
+        num_monitors = monitors.__len__()
+        self.containers = [self]
+        for monitor_index in range(1, num_monitors):
+            monitor_screen_blocker = Toplevel(self)
+            self.containers.append(monitor_screen_blocker)
         self.frame_types = (ScreenBlockerFrame, TransparentCountdownFrame)
         self.frames = {}
         for frame_type in self.frame_types:
-                self.frames[frame_type] = []
-        for s in self.containers:
-            container = Frame(s)
-            container.grid(row=0, column=0, sticky=N + S + E + W)
-            container.grid_rowconfigure(0, weight=1)
-            container.grid_columnconfigure(0, weight=1)
+            self.frames[frame_type] = []
+        for container in self.containers:
+            container_frame = Frame(container)
+            container_frame.grid(row=0, column=0, sticky=N + S + E + W)
+            container_frame.grid_rowconfigure(0, weight=1)
+            container_frame.grid_columnconfigure(0, weight=1)
             for frame_type in self.frame_types:
-                frame_instance = frame_type(container, self, self.time_options_manager, self.mobber_manager, self.countdown_manager)
+                frame_instance = frame_type(container_frame, self, self.time_options_manager, self.mobber_manager,
+                                            self.countdown_manager)
                 self.frames[frame_type].append(frame_instance)
                 frame_instance.grid(row=0, column=0, sticky="nsew")
         self.last_frame = None
@@ -35,13 +41,13 @@ class MobTimerController(Tk):
         for frame_instance in self.frames[TransparentCountdownFrame]:
             frame_instance.bind("<Enter>", self.toggle_transparent_frame_position)
         self.transparent_frame_position = 0
+        self.title("Mob Timer")
 
     def show_frame(self, frame_class):
         switched_frames = False
         if self.last_frame != frame_class:
             for frame_instances in self.frames[frame_class]:
-                    # for frame in frame_instances:
-                    frame_instances.tkraise()
+                frame_instances.tkraise()
             switched_frames = True
         self.last_frame = frame_class
         return switched_frames
@@ -76,9 +82,11 @@ class MobTimerController(Tk):
         self.remove_title_bar()
         self.disable_resizing()
         top_left_screen = "+0+0"
-        for container in self.containers:
-            container.geometry(self.get_current_window_geometry())
-            container.geometry(top_left_screen)
+        monitors = get_monitors()
+
+        for container, monitor in zip(self.containers, monitors):
+            monitor_string = "{}x{}+{}+{}".format(monitor.width, monitor.height, monitor.x, monitor.y)
+            container.geometry(monitor_string)
             container.wait_visibility(container)
             container.attributes("-alpha", 1)
 

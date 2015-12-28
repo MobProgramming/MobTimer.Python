@@ -3,4 +3,7 @@ import py2exe, sys, os
 
 sys.argv.append('py2exe')
 
-setup(windows=['MobTimer.py'], data_files=['C:\\Python34\\tcl\\tcl8.6\\init.tcl'])
+setup(windows=[{
+            "script": 'MobTimer.py',
+            "icon_resources": [(1, "time-bomb.ico")]
+        }], data_files=['C:\\Python34\\tcl\\tcl8.6\\init.tcl'], requires=['screeninfo'])
