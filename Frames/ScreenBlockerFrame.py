@@ -70,7 +70,7 @@ class ScreenBlockerFrame(Frame):
         row_index += 1
 
         self.names_list = Listbox(center_frame, font="Helvetica 16 bold")
-        self.names_list.grid(row=row_index, rowspan=4, columnspan=2, column=0, padx=10, pady=10, sticky=N + E + W)
+        self.names_list.grid(row=row_index, rowspan=6, columnspan=2, column=0, padx=10, pady=10, sticky=N + E + W)
 
         remove_mobber_button = Button(center_frame, text="Remove Mobber")
         remove_mobber_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
@@ -93,9 +93,24 @@ class ScreenBlockerFrame(Frame):
         clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.clear())
         row_index += 1
 
+        clear_mobbers_button = Button(center_frame, text="Skip Driver")
+        clear_mobbers_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
+        clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.switch_navigator_driver())
+        row_index += 1
+
+        clear_mobbers_button = Button(center_frame, text="Rewind Driver")
+        clear_mobbers_button.grid(row=row_index, column=2, sticky=N + E + W, padx=10, pady=10)
+        clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.rewind_driver())
+        row_index += 1
+
         start_button = Button(center_frame, text="Start Mobbing!", font="Helvetica 30 bold")
         start_button.grid(row=row_index, columnspan=3, sticky=N + E + W, padx=10, pady=10)
         start_button.bind("<Button-1>", self.launch_transparent_countdown)
+        row_index += 1
+
+        start_button = Button(center_frame, text="Quit Mobbing!", font="Helvetica 10 bold")
+        start_button.grid(row=row_index, columnspan=3, sticky=N + E + W, padx=50, pady=10)
+        start_button.bind("<Button-1>", lambda event: self.controller.quit_and_destroy_session())
         row_index += 1
 
         center_frame.grid(row=0, column=0, sticky="nsew")

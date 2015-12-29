@@ -1,6 +1,11 @@
+import uuid
 from tkinter import *
+
+import atexit
+
 from Infrastructure.CountdownManager import CountdownManager
 from Infrastructure.MobberManager import MobberManager
+from Infrastructure.SessionManager import SessionManager
 from Infrastructure.TimeOptionsManager import TimeOptionsManager
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
@@ -11,10 +16,19 @@ class MobTimerController(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
 
-        self.iconbitmap(default='C:\\Users\\Chris\\OneDrive\\Git\\Pycharm\\MobTimer\\time-bomb.ico')
+        # self.iconbitmap(default='C:\\Users\\Chris\\OneDrive\\Git\\Pycharm\\MobTimer\\time-bomb.ico')
+        #TODO: iconbitmap needs to load the ico file as a string because of py2exe =/
         self.time_options_manager = TimeOptionsManager()
         self.mobber_manager = MobberManager()
         self.countdown_manager = CountdownManager(self)
+        self.session_manager = SessionManager(uuid)
+        atexit.register(self.session_manager.clear_sessions)
+        if self.session_manager.get_active_sessions().__len__() > 0:
+            self.quit_and_destroy_session()
+
+        self.session_manager.create_session()
+
+        self.countdown_manager.subscribe_to_time_changes(self.show_screen_blocker_when_session_interupted)
 
         monitors = get_monitors()
         num_monitors = monitors.__len__()
@@ -42,6 +56,16 @@ class MobTimerController(Tk):
             frame_instance.bind("<Enter>", self.toggle_transparent_frame_position)
         self.transparent_frame_position = 0
         self.title("Mob Timer")
+
+    def quit_and_destroy_session(self):
+        self.session_manager.clear_sessions()
+        self.quit()
+        sys.exit()
+
+    def show_screen_blocker_when_session_interupted(self, days, minutes, seconds):
+        if self.session_manager.get_active_sessions().__len__() == 0:
+            self.show_screen_blocker_frame()
+            self.session_manager.create_session()
 
     def show_frame(self, frame_class):
         switched_frames = False

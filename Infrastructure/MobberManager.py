@@ -56,9 +56,19 @@ class MobberManager(object):
         self.fire_time_change_callbacks()
 
     def update_navigator_driver_index(self):
-        if self.mobber_list.__len__() > 0:
-            self.driver_index = self.driver_index % self.mobber_list.__len__()
-            self.navigator_index =(self.driver_index + 1) % self.mobber_list.__len__()
+        mobber_count = self.mobber_list.__len__()
+        if mobber_count > 0:
+            self.driver_index = self.driver_index % mobber_count
+            self.navigator_index = (self.driver_index + 1) % mobber_count
         else:
             self.driver_index = 0
             self.navigator_index = 1
+
+    def rewind_driver(self):
+        mobber_count = self.mobber_list.__len__()
+        if mobber_count > 0:
+            self.driver_index = (self.driver_index - 1)
+            if self.driver_index < 0:
+                self.driver_index = mobber_count - 1
+        self.update_navigator_driver_index()
+        self.fire_time_change_callbacks()
