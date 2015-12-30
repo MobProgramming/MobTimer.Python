@@ -10,6 +10,7 @@ All the brilliant people working on the same thing, at the same time, in the sam
 - Switch the person at the keyboard to the new driver
 - Repeat
 - To stop timer mid session open the exe again
+
 ## Project Links
 [Trello Kanban Board]( https://trello.com/b/THISIB9Q/mob-programming-timer-python)
 ## History
