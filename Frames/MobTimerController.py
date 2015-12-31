@@ -2,9 +2,7 @@ import atexit
 import uuid
 from tkinter import *
 from tkinter import ttk
-
 from screeninfo import *
-
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
 from Infrastructure.CountdownManager import CountdownManager
@@ -53,14 +51,14 @@ class MobTimerController(Tk):
 
             container_frame = ttk.Frame(container)
 
-            container_frame.grid(row=0, column=0, sticky=(N , S , E , W))
+            container_frame.grid(row=0, column=0, sticky=(N, S, E, W))
             container_frame.grid_rowconfigure(0, weight=1)
             container_frame.grid_columnconfigure(0, weight=1)
             for frame_type in self.frame_types:
                 frame_instance = frame_type(container_frame, self, self.time_options_manager, self.mobber_manager,
                                             self.countdown_manager, self.settings_manager)
                 self.frames[frame_type].append(frame_instance)
-                frame_instance.grid(row=0, column=0, sticky=(N , S , E , W))
+                frame_instance.grid(row=0, column=0, sticky=(N, S, E, W))
                 frame_instance.grid_rowconfigure(0, weight=1)
                 frame_instance.grid_columnconfigure(0, weight=1)
         self.last_frame = None
@@ -69,6 +67,11 @@ class MobTimerController(Tk):
             frame_instance.bind("<Enter>", self.toggle_transparent_frame_position)
         self.transparent_frame_position = 0
         self.title("Mob Timer")
+        self.bind_all("<Control-Return>", self.launch_transparent_countdown_if_blocking)
+
+    def launch_transparent_countdown_if_blocking(self, event):
+        if self.last_frame == ScreenBlockerFrame:
+            self.show_transparent_countdown_frame()
 
     def quit_and_destroy_session(self):
         self.session_manager.clear_sessions()
@@ -85,7 +88,10 @@ class MobTimerController(Tk):
         if self.last_frame != frame_class:
             for frame_instances in self.frames[frame_class]:
                 frame_instances.tkraise()
+
             switched_frames = True
+            self.focus_force()
+            self.focus_set()
         self.last_frame = frame_class
         return switched_frames
 
@@ -96,6 +102,8 @@ class MobTimerController(Tk):
 
     def show_transparent_countdown_frame(self):
         if self.show_frame(TransparentCountdownFrame):
+            self.countdown_manager.set_countdown_duration(self.time_options_manager.minutes,
+                                                          self.time_options_manager.seconds)
             self.set_partial_screen_transparent()
 
     def get_current_window_geometry(self):
@@ -113,6 +121,7 @@ class MobTimerController(Tk):
     def set_always_on_top(self):
         for container in self.containers:
             container.wm_attributes("-topmost", 1)
+            container.focus_force()
 
     def set_full_screen_always_on_top(self):
         self.set_always_on_top()

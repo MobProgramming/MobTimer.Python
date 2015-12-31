@@ -129,6 +129,8 @@ class ScreenBlockerFrame(ttk.Frame):
 
         center_frame.grid(row=0, column=0, sticky="nsew")
 
+        self.add_mobber_entry.focus_set()
+
     def launch_transparent_countdown(self, event):
         self.countdown_manager.set_countdown_duration(self.time_options_manager.minutes,
                                                       self.time_options_manager.seconds)
