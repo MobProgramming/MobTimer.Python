@@ -1,23 +1,24 @@
+import atexit
 import uuid
 from tkinter import *
+from tkinter import ttk
 
-import atexit
+from screeninfo import *
 
+from Frames.ScreenBlockerFrame import ScreenBlockerFrame
+from Frames.TransparentCountdownFrame import TransparentCountdownFrame
 from Infrastructure.CountdownManager import CountdownManager
 from Infrastructure.MobberManager import MobberManager
 from Infrastructure.SessionManager import SessionManager
+from Infrastructure.SettingsManager import SettingsManager
 from Infrastructure.TimeOptionsManager import TimeOptionsManager
-from Frames.ScreenBlockerFrame import ScreenBlockerFrame
-from Frames.TransparentCountdownFrame import TransparentCountdownFrame
-from screeninfo import *
 
 
 class MobTimerController(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
+        self.settings_manager = SettingsManager()
 
-        # self.iconbitmap(default='C:\\Users\\Chris\\OneDrive\\Git\\Pycharm\\MobTimer\\time-bomb.ico')
-        #TODO: iconbitmap needs to load the ico file as a string because of py2exe =/
         self.time_options_manager = TimeOptionsManager()
         self.mobber_manager = MobberManager()
         self.countdown_manager = CountdownManager(self)
@@ -30,6 +31,12 @@ class MobTimerController(Tk):
 
         self.countdown_manager.subscribe_to_time_changes(self.show_screen_blocker_when_session_interupted)
 
+        style = ttk.Style()
+        print(style.theme_names())
+        theme = self.settings_manager.get_general_theme()
+        if theme != "none":
+            style.theme_use(theme)
+
         monitors = get_monitors()
         num_monitors = monitors.__len__()
         self.containers = [self]
@@ -41,15 +48,21 @@ class MobTimerController(Tk):
         for frame_type in self.frame_types:
             self.frames[frame_type] = []
         for container in self.containers:
-            container_frame = Frame(container)
-            container_frame.grid(row=0, column=0, sticky=N + S + E + W)
+            container.grid_rowconfigure(0, weight=1)
+            container.grid_columnconfigure(0, weight=1)
+
+            container_frame = ttk.Frame(container)
+
+            container_frame.grid(row=0, column=0, sticky=(N , S , E , W))
             container_frame.grid_rowconfigure(0, weight=1)
             container_frame.grid_columnconfigure(0, weight=1)
             for frame_type in self.frame_types:
                 frame_instance = frame_type(container_frame, self, self.time_options_manager, self.mobber_manager,
-                                            self.countdown_manager)
+                                            self.countdown_manager, self.settings_manager)
                 self.frames[frame_type].append(frame_instance)
-                frame_instance.grid(row=0, column=0, sticky="nsew")
+                frame_instance.grid(row=0, column=0, sticky=(N , S , E , W))
+                frame_instance.grid_rowconfigure(0, weight=1)
+                frame_instance.grid_columnconfigure(0, weight=1)
         self.last_frame = None
         self.show_screen_blocker_frame()
         for frame_instance in self.frames[TransparentCountdownFrame]:
@@ -121,11 +134,14 @@ class MobTimerController(Tk):
         for controller in self.containers:
             screenwidth = self.winfo_screenwidth()
             screenheight = self.winfo_screenheight()
-            window_width = int(screenwidth * 0.3)
-            window_height = int(screenheight * 0.3)
+
+            size_percentage = self.settings_manager.get_transparent_window_screen_size_percent()
+            alpha = self.settings_manager.get_transparent_window_alpha_percent()
+            window_width = int(screenwidth * size_percentage)
+            window_height = int(screenheight * size_percentage)
             window_size = "{0}x{1}+0+0".format(window_width, window_height)
             controller.geometry(window_size)
-            controller.attributes("-alpha", 0.3)
+            controller.attributes("-alpha", alpha)
         self.toggle_transparent_frame_position()
 
     def toggle_transparent_frame_position(self, e=None):
@@ -136,8 +152,10 @@ class MobTimerController(Tk):
         self.remove_title_bar()
         self.disable_resizing()
 
-        window_width = int(screenwidth * 0.3)
-        window_height = int(screenheight * 0.3)
+        size_percentage = self.settings_manager.get_transparent_window_screen_size_percent()
+
+        window_width = int(screenwidth * size_percentage)
+        window_height = int(screenheight * size_percentage)
 
         if self.transparent_frame_position == 0:
             self.transparent_frame_position = screenwidth - window_width
