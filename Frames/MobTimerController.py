@@ -2,13 +2,16 @@ import atexit
 import uuid
 from tkinter import *
 from tkinter import ttk
+
 from screeninfo import *
+
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
 from Infrastructure.CountdownManager import CountdownManager
 from Infrastructure.MobberManager import MobberManager
 from Infrastructure.SessionManager import SessionManager
 from Infrastructure.SettingsManager import SettingsManager
+from Infrastructure.ThemeManager import ThemeManager
 from Infrastructure.TimeOptionsManager import TimeOptionsManager
 
 
@@ -26,14 +29,13 @@ class MobTimerController(Tk):
             self.quit_and_destroy_session()
 
         self.session_manager.create_session()
-
+        self.iconbitmap(default='time-bomb.ico')
         self.countdown_manager.subscribe_to_time_changes(self.show_screen_blocker_when_session_interupted)
 
-        style = ttk.Style()
-        print(style.theme_names())
+        self.theme_manager = ThemeManager()
         theme = self.settings_manager.get_general_theme()
-        if theme != "none":
-            style.theme_use(theme)
+        if not theme == 'none':
+            self.theme_manager.set_theme(theme)
 
         monitors = get_monitors()
         num_monitors = monitors.__len__()

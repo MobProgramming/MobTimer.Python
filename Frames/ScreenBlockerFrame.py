@@ -23,6 +23,7 @@ class ScreenBlockerFrame(ttk.Frame):
         for index in range(0, mobber_list.__len__()):
             name = mobber_list[index]
             if index == driver_index:
+                self.current_dev['text'] = "{} time to drive!".format(name)
                 name += " <= Current"
             if index == navigator_index:
                 name += " <= Next"
@@ -39,7 +40,7 @@ class ScreenBlockerFrame(ttk.Frame):
         self._geom = geom
 
     def build_window_content(self):
-        center_frame = Frame(self)
+        center_frame = ttk.Frame(self)
         center_frame.grid(row=0, column=0)
         center_frame.grid_columnconfigure(0, weight=1)
         center_frame.grid_columnconfigure(1, weight=0)
@@ -73,7 +74,11 @@ class ScreenBlockerFrame(ttk.Frame):
         self.label_seconds.bind("<Button-3>", lambda event: self.time_options_manager.decrement_seconds())
         row_index += 1
 
-        self.add_mobber_entry = ttk.Entry(center_frame, text="Add Mobber", font="Helvetica 16 bold")
+        self.current_dev = ttk.Label(center_frame, text="", font="Helvetica 70 bold italic")
+        self.current_dev.grid(row=row_index, columnspan=5)
+        row_index += 1
+
+        self.add_mobber_entry = ttk.Entry(center_frame, style="EntryStyle.TEntry", text="Add Mobber", font="Helvetica 16 bold")
         self.add_mobber_entry.grid(row=row_index, column = 1, columnspan=2, sticky=N + E + W, padx=10, pady=10)
         self.add_mobber_entry.bind("<Return>", self.add_mobber_left_click)
         self.add_mobber_entry.bind("<Control-Return>", self.launch_transparent_countdown)
@@ -84,7 +89,8 @@ class ScreenBlockerFrame(ttk.Frame):
         row_index += 1
 
         self.names_list = ttk.Treeview(center_frame)
-        self.names_list.grid(row=row_index, rowspan=6, columnspan=2, column=1, padx=10, pady=10, sticky=N + E + W)
+        self.names_list['show'] = 'tree'
+        self.names_list.grid(row=row_index, rowspan=6, columnspan=2, column=1, padx=10, pady=10, sticky=N + E + W + S)
 
         remove_mobber_button = ttk.Button(center_frame, text="Remove Mobber")
         remove_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=10)
@@ -117,7 +123,7 @@ class ScreenBlockerFrame(ttk.Frame):
         clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.rewind_driver())
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="Start Mobbing!")
+        start_button = ttk.Button(center_frame, text="Start Mobbing!", style="StartButton.TButton",)
         start_button.grid(row=row_index, column=1,columnspan=3, sticky=N + E + W, padx=10, pady=10)
         start_button.bind("<Button-1>", self.launch_transparent_countdown)
         row_index += 1

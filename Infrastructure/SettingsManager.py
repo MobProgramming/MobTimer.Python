@@ -8,7 +8,6 @@ class SettingsManager(object):
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config.read("MobTimer.cfg")
-        print(self.config.__len__())
         # with open("MobTimer.cfg", 'w') as configfile:
         #     self.config.write(configfile)
 
@@ -28,4 +27,4 @@ class SettingsManager(object):
         return self.config[SettingsManager.TRANSPARENT_WINDOW_SETTINGS].getint("next driver font size", 10)
 
     def get_general_theme(self):
-        return self.config[SettingsManager.GENERAL_SETTINGS].get("theme", 'clam')
+        return self.config[SettingsManager.GENERAL_SETTINGS].get("theme", 'none')
