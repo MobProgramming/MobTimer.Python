@@ -91,6 +91,7 @@ class TestsTimeOptionsManager(unittest.TestCase):
         time_options_manager.increment_minutes()
         time_options_manager.increment_minutes()
         time_options_manager.increment_minutes()
+        time_options_manager.set_countdown_time(3, 14)
 
         Approvals.verify(result["result"], TextDiffReporter())
 

@@ -9,8 +9,9 @@ class MobberManager(object):
         return self.mobber_list.__len__()
 
     def add_mobber(self, mobber_name):
-        self.mobber_list.append(mobber_name)
-        self.fire_time_change_callbacks()
+        if str(mobber_name).strip() != "":
+            self.mobber_list.append(mobber_name)
+            self.fire_time_change_callbacks()
 
     def get_mobbers(self):
         return self.mobber_list

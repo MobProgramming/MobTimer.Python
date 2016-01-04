@@ -31,6 +31,7 @@ class ThemeManager(object):
                               ('active', highlight_color)])
 
         style.configure('TLabel', background=background_color, foreground=text_color)
+        style.configure('Highlight.TLabel', background=background_color, foreground=highlight_color)
         style.configure("Treeview", background=background_color,
                         foreground=text_color, fieldbackground=background_color, font="Helvetica 16 bold")
         style.element_create("plain.field", "from", "clam")

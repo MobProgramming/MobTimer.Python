@@ -3,7 +3,7 @@ from tkinter import ttk
 
 
 class ScreenBlockerFrame(ttk.Frame):
-    def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, settings_manager,
+    def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, settings_manager,tips_manager,
                  **kwargs):
         super().__init__(master, **kwargs)
 
@@ -18,6 +18,7 @@ class ScreenBlockerFrame(ttk.Frame):
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
 
     def mobber_list_change_callback(self, mobber_list, driver_index, navigator_index):
+        self.current_dev['text'] = ""
         for i in self.names_list.get_children():
             self.names_list.delete(i)
         for index in range(0, mobber_list.__len__()):
@@ -58,8 +59,6 @@ class ScreenBlockerFrame(ttk.Frame):
         title.grid(row=row_index, columnspan=5, padx=30, pady=0)
         row_index += 1
 
-
-
         self.label_minutes = ttk.Label(center_frame, text="10", font="Helvetica 180 bold")
         self.label_minutes.grid(row=row_index, column=1, sticky=E)
         self.label_minutes.bind("<Button-1>", lambda event: self.time_options_manager.increment_minutes())
@@ -78,10 +77,12 @@ class ScreenBlockerFrame(ttk.Frame):
         self.current_dev.grid(row=row_index, columnspan=5)
         row_index += 1
 
-        self.add_mobber_entry = ttk.Entry(center_frame, style="EntryStyle.TEntry", text="Add Mobber", font="Helvetica 16 bold")
-        self.add_mobber_entry.grid(row=row_index, column = 1, columnspan=2, sticky=N + E + W, padx=10, pady=10)
+        self.add_mobber_entry = ttk.Entry(center_frame, style="EntryStyle.TEntry", text="Add Mobber",
+                                          font="Helvetica 16 bold")
+        self.add_mobber_entry.grid(row=row_index, column=1, columnspan=2, sticky=N + E + W, padx=10, pady=10)
         self.add_mobber_entry.bind("<Return>", self.add_mobber_left_click)
-        self.add_mobber_entry.bind("<Control-Return>", self.launch_transparent_countdown)
+        self.add_mobber_entry.bind("<Control-Return>", lambda event: self.controller.show_transparent_countdown_frame()
+                                   )
 
         add_mobber_button = ttk.Button(center_frame, text="Add Mobber")
         add_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=10)
@@ -123,9 +124,9 @@ class ScreenBlockerFrame(ttk.Frame):
         clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.rewind_driver())
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="Start Mobbing!", style="StartButton.TButton",)
-        start_button.grid(row=row_index, column=1,columnspan=3, sticky=N + E + W, padx=10, pady=10)
-        start_button.bind("<Button-1>", self.launch_transparent_countdown)
+        start_button = ttk.Button(center_frame, text="Start Mobbing!", style="StartButton.TButton", )
+        start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=10, pady=10)
+        start_button.bind("<Button-1>", lambda event: self.controller.show_transparent_countdown_frame())
         row_index += 1
 
         start_button = ttk.Button(center_frame, text="Quit Mobbing!")
@@ -135,12 +136,10 @@ class ScreenBlockerFrame(ttk.Frame):
 
         center_frame.grid(row=0, column=0, sticky="nsew")
 
-        self.add_mobber_entry.focus_set()
+        self.focus_mobber_entry()
 
-    def launch_transparent_countdown(self, event):
-        self.countdown_manager.set_countdown_duration(self.time_options_manager.minutes,
-                                                      self.time_options_manager.seconds)
-        self.controller.show_transparent_countdown_frame()
+    def focus_mobber_entry(self):
+        self.add_mobber_entry.focus_set()
 
     def move_mobber_down_left_click(self, event):
         selected_items = self.names_list.selection()

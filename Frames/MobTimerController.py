@@ -5,6 +5,7 @@ from tkinter import ttk
 
 from screeninfo import *
 
+from Frames.MinimalScreenBlockerFrame import MinimalScreenBlockerFrame
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
 from Infrastructure.CountdownManager import CountdownManager
@@ -13,13 +14,14 @@ from Infrastructure.SessionManager import SessionManager
 from Infrastructure.SettingsManager import SettingsManager
 from Infrastructure.ThemeManager import ThemeManager
 from Infrastructure.TimeOptionsManager import TimeOptionsManager
+from Infrastructure.TipsManager import TipsManager
 
 
 class MobTimerController(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
         self.settings_manager = SettingsManager()
-
+        self.tips_manager = TipsManager()
         self.time_options_manager = TimeOptionsManager()
         self.mobber_manager = MobberManager()
         self.countdown_manager = CountdownManager(self)
@@ -43,7 +45,7 @@ class MobTimerController(Tk):
         for monitor_index in range(1, num_monitors):
             monitor_screen_blocker = Toplevel(self)
             self.containers.append(monitor_screen_blocker)
-        self.frame_types = (ScreenBlockerFrame, TransparentCountdownFrame)
+        self.frame_types = (ScreenBlockerFrame, TransparentCountdownFrame, MinimalScreenBlockerFrame)
         self.frames = {}
         for frame_type in self.frame_types:
             self.frames[frame_type] = []
@@ -58,7 +60,7 @@ class MobTimerController(Tk):
             container_frame.grid_columnconfigure(0, weight=1)
             for frame_type in self.frame_types:
                 frame_instance = frame_type(container_frame, self, self.time_options_manager, self.mobber_manager,
-                                            self.countdown_manager, self.settings_manager)
+                                            self.countdown_manager, self.settings_manager, self.tips_manager)
                 self.frames[frame_type].append(frame_instance)
                 frame_instance.grid(row=0, column=0, sticky=(N, S, E, W))
                 frame_instance.grid_rowconfigure(0, weight=1)
@@ -70,10 +72,15 @@ class MobTimerController(Tk):
         self.transparent_frame_position = 0
         self.title("Mob Timer")
         self.bind_all("<Control-Return>", self.launch_transparent_countdown_if_blocking)
+        self.time_options_manager.set_countdown_time(self.settings_manager.get_general_minutes(), self.settings_manager.get_general_seconds())
 
     def launch_transparent_countdown_if_blocking(self, event):
-        if self.last_frame == ScreenBlockerFrame:
+        if self.last_frame == ScreenBlockerFrame or self.last_frame == MinimalScreenBlockerFrame:
             self.show_transparent_countdown_frame()
+
+    def show_minimal_screen_blocker_frame(self):
+        if self.last_frame != ScreenBlockerFrame:
+            self.launch_blocking_Frame(MinimalScreenBlockerFrame)
 
     def quit_and_destroy_session(self):
         self.session_manager.clear_sessions()
@@ -95,10 +102,14 @@ class MobTimerController(Tk):
             self.focus_force()
             self.focus_set()
         self.last_frame = frame_class
+
         return switched_frames
 
     def show_screen_blocker_frame(self):
-        if self.show_frame(ScreenBlockerFrame):
+        self.launch_blocking_Frame(ScreenBlockerFrame)
+
+    def launch_blocking_Frame(self, frame):
+        if self.show_frame(frame):
             self.mobber_manager.switch_navigator_driver()
             self.set_full_screen_always_on_top()
 

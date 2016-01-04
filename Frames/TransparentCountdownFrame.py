@@ -5,7 +5,7 @@ from Infrastructure.SettingsManager import SettingsManager
 
 
 class TransparentCountdownFrame(ttk.Frame):
-    def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, settings_manager,
+    def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, settings_manager,tips_manager,
                  **kwargs):
         super().__init__(master, **kwargs)
         self.master = master
@@ -19,7 +19,7 @@ class TransparentCountdownFrame(ttk.Frame):
 
     def update_time_change_callback(self, days, minutes, seconds):
         if days < 0 or minutes < 0 or seconds < 0:
-            self.controller.show_screen_blocker_frame()
+            self.controller.show_minimal_screen_blocker_frame()
         self.label_minutes['text'] = "{0:0>2}".format(minutes)
         self.label_seconds['text'] = "{0:0>2}".format(seconds)
 

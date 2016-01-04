@@ -1,0 +1,6 @@
+Have you done a retrospective lately?
+Individuals and interactions over processes and tools
+Working software over comprehensive documentation
+Customer collaboration over contract negotiation
+Responding to change over following a plan
+Our highest priority is to satisfy the customer through early and continuous delivery of valuable software.
