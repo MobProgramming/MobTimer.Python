@@ -55,7 +55,7 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         start_button.bind("<Button-1>", lambda event: self.controller.show_screen_blocker_frame())
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="Quit Mobbing!")
+        start_button = ttk.Button(center_frame, text="Quit Mobbing")
         start_button.grid(row=row_index, column=2, columnspan=3, sticky=N + E + W, padx=200, pady=10)
         start_button.bind("<Button-1>", lambda event: self.controller.quit_and_destroy_session())
         row_index += 1

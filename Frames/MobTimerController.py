@@ -20,6 +20,8 @@ from Infrastructure.TipsManager import TipsManager
 class MobTimerController(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
+        self.transparent_frame_monitor_index = 0
+        self.transparent_frame_position_index = 0
         self.settings_manager = SettingsManager()
         self.tips_manager = TipsManager()
         self.time_options_manager = TimeOptionsManager()
@@ -181,10 +183,15 @@ class MobTimerController(Tk):
 
     def toggle_transparent_frame_position(self, e=None):
         if self.state() == "withdrawn":
-            print("withdrawn")
             return
-        screenwidth = self.winfo_screenwidth()
-        screenheight = self.winfo_screenheight()
+
+
+
+        monitors = get_monitors()
+        monitor = monitors[self.transparent_frame_monitor_index]
+
+        screenwidth = monitor.width
+        screenheight = monitor.height
 
         self.set_always_on_top()
         self.remove_title_bar()
@@ -194,12 +201,13 @@ class MobTimerController(Tk):
 
         window_width = int(screenwidth * size_percentage)
         window_height = int(screenheight * size_percentage)
-
-        if self.transparent_frame_position == 0:
-            self.transparent_frame_position = screenwidth - window_width
+        if self.transparent_frame_position_index == 0:
+            self.transparent_frame_position = monitor.x + screenwidth - window_width
+            self.transparent_frame_monitor_index = (self.transparent_frame_monitor_index + 1) % (monitors.__len__())
         else:
-            self.transparent_frame_position = 0
+            self.transparent_frame_position = monitor.x + 0
+        self.transparent_frame_position_index = (self.transparent_frame_position_index + 1) % 2
 
-        bottom_left_screen = "+{}+{}".format(self.transparent_frame_position, screenheight - window_height)
-        for controller in self.containers:
-            controller.geometry(bottom_left_screen)
+        bottom_left_screen = "{}x{}+{}+{}".format(window_width,window_height,self.transparent_frame_position, monitor.y +
+                                                  screenheight - window_height)
+        self.geometry(bottom_left_screen)

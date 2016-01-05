@@ -129,7 +129,7 @@ class ScreenBlockerFrame(ttk.Frame):
         start_button.bind("<Button-1>", lambda event: self.controller.show_transparent_countdown_frame())
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="Quit Mobbing!")
+        start_button = ttk.Button(center_frame, text="Quit Mobbing")
         start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=50, pady=10)
         start_button.bind("<Button-1>", lambda event: self.controller.quit_and_destroy_session())
         row_index += 1
