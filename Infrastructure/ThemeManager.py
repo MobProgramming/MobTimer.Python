@@ -33,7 +33,7 @@ class ThemeManager(object):
         style.configure('TLabel', background=background_color, foreground=text_color)
         style.configure('Highlight.TLabel', background=background_color, foreground=highlight_color)
         style.configure("Treeview", background=background_color,
-                        foreground=text_color, fieldbackground=background_color, font="Helvetica 16 bold")
+                        foreground=text_color, fieldbackground=background_color, font="Helvetica 16 bold",  rowheight=30)
         style.element_create("plain.field", "from", "clam")
         style.configure("StartButton.TButton",font="Helvetica 50 bold")
 

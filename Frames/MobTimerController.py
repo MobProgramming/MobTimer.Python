@@ -75,12 +75,17 @@ class MobTimerController(Tk):
         self.time_options_manager.set_countdown_time(self.settings_manager.get_general_minutes(), self.settings_manager.get_general_seconds())
 
     def launch_transparent_countdown_if_blocking(self, event):
-        if self.last_frame == ScreenBlockerFrame or self.last_frame == MinimalScreenBlockerFrame:
+        if self.frame_is_screen_blocking():
+
             self.show_transparent_countdown_frame()
 
+    def frame_is_screen_blocking(self):
+        return self.last_frame == ScreenBlockerFrame or self.last_frame == MinimalScreenBlockerFrame
+
     def show_minimal_screen_blocker_frame(self):
-        if self.last_frame != ScreenBlockerFrame:
+        if self.last_frame != MinimalScreenBlockerFrame:
             self.launch_blocking_Frame(MinimalScreenBlockerFrame)
+            self.mobber_manager.switch_navigator_driver()
 
     def quit_and_destroy_session(self):
         self.session_manager.clear_sessions()
@@ -93,6 +98,7 @@ class MobTimerController(Tk):
             self.session_manager.create_session()
 
     def show_frame(self, frame_class):
+
         switched_frames = False
         if self.last_frame != frame_class:
             for frame_instances in self.frames[frame_class]:
@@ -103,14 +109,21 @@ class MobTimerController(Tk):
             self.focus_set()
         self.last_frame = frame_class
 
+        for container in self.containers:
+            if isinstance(container, Toplevel):
+                if self.frame_is_screen_blocking():
+                    container.deiconify()
+                else:
+                    container.withdraw()
+
         return switched_frames
 
     def show_screen_blocker_frame(self):
-        self.launch_blocking_Frame(ScreenBlockerFrame)
+        if self.last_frame != ScreenBlockerFrame:
+            self.launch_blocking_Frame(ScreenBlockerFrame)
 
     def launch_blocking_Frame(self, frame):
         if self.show_frame(frame):
-            self.mobber_manager.switch_navigator_driver()
             self.set_full_screen_always_on_top()
 
     def show_transparent_countdown_frame(self):
@@ -167,6 +180,9 @@ class MobTimerController(Tk):
         self.toggle_transparent_frame_position()
 
     def toggle_transparent_frame_position(self, e=None):
+        if self.state() == "withdrawn":
+            print("withdrawn")
+            return
         screenwidth = self.winfo_screenwidth()
         screenheight = self.winfo_screenheight()
 

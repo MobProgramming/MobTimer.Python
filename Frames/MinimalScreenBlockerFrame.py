@@ -17,7 +17,6 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         self.tips_manager = tips_manager
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
 
-
     def build_window_content(self):
         center_frame = ttk.Frame(self)
         center_frame.grid(row=0, column=0)
@@ -42,7 +41,7 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         self.next_mobber_label.grid(row=row_index, columnspan=5, padx=30, pady=10)
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="   Start Mobbing!   ", style="StartButton.TButton", )
+        start_button = ttk.Button(center_frame, text="Start Mobbing!", style="StartButton.TButton", )
         start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=10, pady=10)
         start_button.bind("<Button-1>", lambda event: self.controller.show_transparent_countdown_frame())
         row_index += 1
@@ -57,7 +56,7 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         row_index += 1
 
         start_button = ttk.Button(center_frame, text="Quit Mobbing!")
-        start_button.grid(row=row_index, column=2, columnspan=3, sticky=N + E + W, padx=90, pady=10)
+        start_button.grid(row=row_index, column=2, columnspan=3, sticky=N + E + W, padx=200, pady=10)
         start_button.bind("<Button-1>", lambda event: self.controller.quit_and_destroy_session())
         row_index += 1
 
