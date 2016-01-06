@@ -62,7 +62,7 @@ class MobTimerController(Tk):
             container_frame.grid_columnconfigure(0, weight=1)
             for frame_type in self.frame_types:
                 frame_instance = frame_type(container_frame, self, self.time_options_manager, self.mobber_manager,
-                                            self.countdown_manager, self.settings_manager, self.tips_manager)
+                                            self.countdown_manager, self.settings_manager, self.tips_manager, self.theme_manager)
                 self.frames[frame_type].append(frame_instance)
                 frame_instance.grid(row=0, column=0, sticky=(N, S, E, W))
                 frame_instance.grid_rowconfigure(0, weight=1)

@@ -36,3 +36,6 @@ class SettingsManager(object):
 
     def get_general_seconds(self):
         return self.timer_settings_.getint("seconds", 0)
+
+    def get_general_enable_tips(self):
+        return self.general_settings_.getboolean("enable tips", True)

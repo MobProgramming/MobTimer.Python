@@ -6,7 +6,7 @@ from Infrastructure.SettingsManager import SettingsManager
 
 class TransparentCountdownFrame(ttk.Frame):
     def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, settings_manager,
-                 tips_manager,
+                 tips_manager,theme_manager,
                  **kwargs):
         super().__init__(master, **kwargs)
         self.master = master

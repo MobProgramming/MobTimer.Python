@@ -3,7 +3,7 @@ from tkinter import ttk, N, E, W
 
 class MinimalScreenBlockerFrame(ttk.Frame):
     def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, settings_manager,
-                 tips_manager,
+                 tips_manager,theme_manager,
                  **kwargs):
         super().__init__(master, **kwargs)
 
@@ -41,14 +41,15 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         self.next_mobber_label.grid(row=row_index, columnspan=5, padx=30, pady=10)
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="Start Mobbing!", style="StartButton.TButton", )
+        start_button = ttk.Button(center_frame, text="Continue Mobbing!", style="StartButton.TButton", )
         start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=10, pady=10)
         start_button.bind("<Button-1>", lambda event: self.controller.show_transparent_countdown_frame())
         row_index += 1
 
-        self.tip_text = ttk.Label(center_frame, text="", font="Helvetica 15 bold", wraplength=500)
-        self.tip_text.grid(row=row_index, columnspan=3, padx=30, pady=10)
-        row_index += 1
+        if self.settings_manager.get_general_enable_tips():
+            self.tip_text = ttk.Label(center_frame, text="", font="Helvetica 15 bold", wraplength=500)
+            self.tip_text.grid(row=row_index, columnspan=3, padx=30, pady=10)
+            row_index += 1
 
         start_button = ttk.Button(center_frame, text="Mob Setup & Time")
         start_button.grid(row=row_index, column=2, columnspan=3, sticky=N + E + W, padx=90, pady=10)
@@ -69,4 +70,5 @@ class MinimalScreenBlockerFrame(ttk.Frame):
                 self.current_mobber_label['text'] = "{}, time to drive!".format(name)
             if index == navigator_index:
                 self.next_mobber_label['text'] = "{}, up next!".format(name)
-        self.tip_text['text'] = self.tips_manager.get_random_tip()
+        if self.settings_manager.get_general_enable_tips():
+            self.tip_text['text'] = self.tips_manager.get_random_tip()
