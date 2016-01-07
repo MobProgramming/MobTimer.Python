@@ -76,6 +76,7 @@ class MobTimerController(Tk):
         self.bind_all("<Control-Return>", self.launch_transparent_countdown_if_blocking)
         self.time_options_manager.set_countdown_time(self.settings_manager.get_general_minutes(), self.settings_manager.get_general_seconds())
 
+
     def launch_transparent_countdown_if_blocking(self, event):
         if self.frame_is_screen_blocking():
 
@@ -180,6 +181,14 @@ class MobTimerController(Tk):
             controller.geometry(window_size)
             controller.attributes("-alpha", alpha)
         self.toggle_transparent_frame_position()
+
+    def fade_app(self):
+         for controller in self.containers:
+             controller.attributes("-alpha", self.settings_manager.get_continue_screen_blocker_window_alpha_percent())
+
+    def unfade_app(self):
+        for controller in self.containers:
+            controller.attributes("-alpha", 1)
 
     def toggle_transparent_frame_position(self, e=None):
         if self.state() == "withdrawn":

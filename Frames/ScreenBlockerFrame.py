@@ -108,7 +108,7 @@ class ScreenBlockerFrame(ttk.Frame):
         self.names_list = ttk.Treeview(center_frame)
         self.names_list.tag_configure(TAGNAME_CURRENT_MOBBER, background=self.theme_manager.highlight_color, foreground=self.theme_manager.background_color)
         self.names_list['show'] = 'tree'
-        self.names_list.grid(row=row_index, rowspan=6, columnspan=2, column=1, padx=10, pady=button_pad,
+        self.names_list.grid(row=row_index, rowspan=7, columnspan=2, column=1, padx=10, pady=button_pad,
                              sticky=N + E + W + S)
 
         remove_mobber_button = ttk.Button(center_frame, text="Remove Mobber")
@@ -142,6 +142,11 @@ class ScreenBlockerFrame(ttk.Frame):
         clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.rewind_driver())
         row_index += 1
 
+        clear_mobbers_button = ttk.Button(center_frame, text="Add Team")
+        clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+        clear_mobbers_button.bind("<Button-1>", self.add_default_team)
+        row_index += 1
+
         start_button = ttk.Button(center_frame, text="Start Mobbing!", style="StartButton.TButton", )
         start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=10, pady=button_pad)
         start_button.bind("<Button-1>", lambda event: self.controller.show_transparent_countdown_frame())
@@ -155,6 +160,12 @@ class ScreenBlockerFrame(ttk.Frame):
         center_frame.grid(row=0, column=0, sticky="nsew")
 
         self.focus_mobber_entry()
+
+    def add_default_team(self,event):
+        team = self.settings_manager.get_general_team().split(',')
+        self.mobber_manager.clear()
+        for member in team:
+            self.mobber_manager.add_mobber(member)
 
     def focus_mobber_entry(self):
         self.add_mobber_entry.focus_set()

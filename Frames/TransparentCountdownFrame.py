@@ -45,20 +45,17 @@ class TransparentCountdownFrame(ttk.Frame):
         count_down_timer_font = "Helvetica {} bold".format(
             self.settings_manager.get_transparent_window_count_down_timer_font_size())
         self.label_time = ttk.Label(self, text="10:00", font=count_down_timer_font)
-        # self.label_time.grid(row=row_index, sticky=(N))
         self.label_time.pack()
 
         row_index += 1
         next_driver_font = "Helvetica {} bold".format(
             self.settings_manager.get_transparent_window_next_driver_font_size())
         self.label_navigator = ttk.Label(self, text=self.get_navigator_text(""), font=next_driver_font)
-        # self.label_navigator.grid(row=row_index, sticky=(N))
         self.label_navigator.pack()
 
         row_index += 1
         driver_font = "Helvetica {} bold".format(self.settings_manager.get_transparent_window_driver_font_size())
         self.label_driver = ttk.Label(self, text=self.get_driver_text(""), font=driver_font)
-        # self.label_driver.grid(row=row_index, sticky=(N))
         self.label_driver.pack()
         row_index += 1
 

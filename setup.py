@@ -15,6 +15,7 @@ def get_file_paths(folder_name):
 
 theme_file_paths = get_file_paths("Themes")
 tips_file_paths = get_file_paths("Tips")
+image_file_paths = get_file_paths("Images")
 
 tcl__path = '{}\\tcl\\tcl8.6\\init.tcl'.format(os.path.dirname(sys.executable))
 
@@ -27,5 +28,6 @@ setup(windows=[{
         ('', ["time-bomb.ico"]),
         ('Themes', theme_file_paths),
         ('Tips', tips_file_paths),
+        ('Images', image_file_paths),
         tcl__path]
     , requires=['screeninfo'])
