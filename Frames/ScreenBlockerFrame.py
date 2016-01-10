@@ -1,5 +1,9 @@
+import random
 from tkinter import *
 from tkinter import ttk
+from Infrastructure.ImageUtility import ImageUtility
+from PIL import Image
+from PIL import ImageTk
 
 TAGNAME_CURRENT_MOBBER = 'current_mobber'
 
@@ -17,6 +21,9 @@ class ScreenBlockerFrame(ttk.Frame):
         self.time_options_manager = time_options_manager
         self.mobber_manager = mobber_manager
         self.settings_manager = settings_manager
+        self.mouse_wheel_seconds_delta = self.settings_manager.get_screen_blocker_mouse_wheel_seconds_delta()
+        self.click_seconds_delta = self.settings_manager.get_screen_blocker_click_seconds_delta()
+
         self.build_window_content()
         self.time_options_manager.subscribe_to_timechange(self.time_change_callback)
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
@@ -52,13 +59,18 @@ class ScreenBlockerFrame(ttk.Frame):
             self.time_options_manager.decrement_minutes()
 
     def mouse_wheel_seconds(self, event):
+
         if event.delta > 0:
-            self.time_options_manager.increment_seconds()
+            self.time_options_manager.increment_seconds(self.mouse_wheel_seconds_delta)
         else:
-            self.time_options_manager.decrement_seconds()
+            self.time_options_manager.decrement_seconds(self.mouse_wheel_seconds_delta)
 
     def build_window_content(self):
+
+
+
         center_frame = ttk.Frame(self)
+
         center_frame.grid(row=0, column=0)
         center_frame.grid_columnconfigure(0, weight=1)
         center_frame.grid_columnconfigure(1, weight=0)
@@ -66,8 +78,16 @@ class ScreenBlockerFrame(ttk.Frame):
         center_frame.grid_columnconfigure(3, weight=0)
         center_frame.grid_columnconfigure(4, weight=1)
 
+
+
         row_index = 0
-        title = ttk.Label(center_frame, text="Mobbing Timer", font="Helvetica 60 bold italic")
+
+        if self.settings_manager.get_general_use_logo_image():
+            self.image_utility = ImageUtility(self.theme_manager)
+            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(),800,200,self.settings_manager.get_general_auto_theme_logo())
+            title = ttk.Label(center_frame, image=self.background_image)
+        else:
+            title = ttk.Label(center_frame, text="Mobbing Timer", font="Helvetica 60 bold italic")
         title.grid(row=row_index, columnspan=5, padx=30, pady=(70, 10))
         row_index += 1
 
@@ -87,8 +107,10 @@ class ScreenBlockerFrame(ttk.Frame):
 
         self.label_seconds = ttk.Label(center_frame, text="30", font="Helvetica 180 bold")
         self.label_seconds.grid(row=row_index, column=3, sticky=W)
-        self.label_seconds.bind("<Button-1>", lambda event: self.time_options_manager.increment_seconds())
-        self.label_seconds.bind("<Button-3>", lambda event: self.time_options_manager.decrement_seconds())
+        self.label_seconds.bind("<Button-1>",
+                                lambda event: self.time_options_manager.increment_seconds(self.click_seconds_delta))
+        self.label_seconds.bind("<Button-3>",
+                                lambda event: self.time_options_manager.decrement_seconds(self.click_seconds_delta))
         self.label_seconds.bind("<MouseWheel>", self.mouse_wheel_seconds)
         row_index += 1
 
@@ -106,7 +128,8 @@ class ScreenBlockerFrame(ttk.Frame):
         row_index += 1
 
         self.names_list = ttk.Treeview(center_frame)
-        self.names_list.tag_configure(TAGNAME_CURRENT_MOBBER, background=self.theme_manager.highlight_color, foreground=self.theme_manager.background_color)
+        self.names_list.tag_configure(TAGNAME_CURRENT_MOBBER, background=self.theme_manager.highlight_color,
+                                      foreground=self.theme_manager.background_color)
         self.names_list['show'] = 'tree'
         self.names_list.grid(row=row_index, rowspan=7, columnspan=2, column=1, padx=10, pady=button_pad,
                              sticky=N + E + W + S)
@@ -115,6 +138,7 @@ class ScreenBlockerFrame(ttk.Frame):
         remove_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
         remove_mobber_button.bind("<Button-1>", lambda event: self.mobber_manager.remove_mobber(
             int(self.names_list.index(self.names_list.selection()))))
+        self.controller.bind("<Delete>", self.remove_mobber_if_screen_blocking)
         row_index += 1
 
         move_mobber_up_button = ttk.Button(center_frame, text="Move Mobber Up")
@@ -134,12 +158,13 @@ class ScreenBlockerFrame(ttk.Frame):
 
         clear_mobbers_button = ttk.Button(center_frame, text="Skip Driver")
         clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
-        clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.switch_navigator_driver())
+        clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.switch_next_driver())
         row_index += 1
 
-        clear_mobbers_button = ttk.Button(center_frame, text="Rewind Driver")
-        clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
-        clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.rewind_driver())
+        if not self.settings_manager.get_randomize_randomize_next_driver():
+            clear_mobbers_button = ttk.Button(center_frame, text="Rewind Driver")
+            clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+            clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.rewind_driver())
         row_index += 1
 
         clear_mobbers_button = ttk.Button(center_frame, text="Add Team")
@@ -161,9 +186,16 @@ class ScreenBlockerFrame(ttk.Frame):
 
         self.focus_mobber_entry()
 
-    def add_default_team(self,event):
+    def remove_mobber_if_screen_blocking(self,event):
+        if self.controller.last_frame == ScreenBlockerFrame:
+            self.mobber_manager.remove_mobber(int(self.names_list.index(self.names_list.selection())))
+
+    def add_default_team(self, event):
         team = self.settings_manager.get_general_team().split(',')
+        randomize_team = self.settings_manager.get_randomize_team()
         self.mobber_manager.clear()
+        if randomize_team:
+            random.shuffle(team)
         for member in team:
             self.mobber_manager.add_mobber(member)
 

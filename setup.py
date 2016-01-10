@@ -24,8 +24,7 @@ setup(windows=[{
     "icon_resources": [(1, "time-bomb.ico")]
 }]
     , data_files=[
-        ('', ["MobTimer.cfg"]),
-        ('', ["time-bomb.ico"]),
+        ('', ["MobTimer.cfg","company-logo.png","time-bomb.ico"]),
         ('Themes', theme_file_paths),
         ('Tips', tips_file_paths),
         ('Images', image_file_paths),

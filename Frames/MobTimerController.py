@@ -25,7 +25,7 @@ class MobTimerController(Tk):
         self.settings_manager = SettingsManager()
         self.tips_manager = TipsManager()
         self.time_options_manager = TimeOptionsManager()
-        self.mobber_manager = MobberManager()
+        self.mobber_manager = MobberManager(self.settings_manager.get_randomize_randomize_next_driver())
         self.countdown_manager = CountdownManager(self)
         self.session_manager = SessionManager(uuid)
         atexit.register(self.session_manager.clear_sessions)
@@ -88,7 +88,7 @@ class MobTimerController(Tk):
     def show_minimal_screen_blocker_frame(self):
         if self.last_frame != MinimalScreenBlockerFrame:
             self.launch_blocking_Frame(MinimalScreenBlockerFrame)
-            self.mobber_manager.switch_navigator_driver()
+            self.mobber_manager.switch_next_driver()
 
     def quit_and_destroy_session(self):
         self.session_manager.clear_sessions()

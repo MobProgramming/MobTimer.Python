@@ -34,11 +34,11 @@ class TestsTimeOptionsManager(unittest.TestCase):
     def test_increment_seconds_4_times_is_10_minutes(self):
         time_options_manager = TimeOptionsManager()
         time_options_manager.increment_seconds()
-        time_options_manager.increment_seconds()
+        time_options_manager.increment_seconds(1)
         time_options_manager.increment_seconds()
         time_options_manager.increment_seconds()
         result = time_options_manager.get_time_string()
-        self.assertEqual(result, "10:00")
+        self.assertEqual(result, "10:46")
 
     def test_decrement_seconds_once_is_10_minutes_45_seconds(self):
         time_options_manager = TimeOptionsManager()
@@ -49,10 +49,10 @@ class TestsTimeOptionsManager(unittest.TestCase):
     def test_decrement_seconds_3_times_is_10_minutes_45_seconds(self):
         time_options_manager = TimeOptionsManager()
         time_options_manager.decrement_seconds()
-        time_options_manager.decrement_seconds()
+        time_options_manager.decrement_seconds(1)
         time_options_manager.decrement_seconds()
         result = time_options_manager.get_time_string()
-        self.assertEqual(result, "10:15")
+        self.assertEqual(result, "10:16")
 
     def test_subscribe_to_time_changes(self):
         time_options_manager = TimeOptionsManager()
