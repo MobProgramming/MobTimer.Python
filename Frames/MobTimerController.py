@@ -13,7 +13,7 @@ from Infrastructure.MobberManager import MobberManager
 from Infrastructure.SessionManager import SessionManager
 from Infrastructure.SettingsManager import SettingsManager
 from Infrastructure.ThemeManager import ThemeManager
-from Infrastructure.TimeOptionsManager import TimeOptionsManager
+from Infrastructure.TimeSettingsManager import TimeSettingsManager
 from Infrastructure.TipsManager import TipsManager
 
 
@@ -24,7 +24,7 @@ class MobTimerController(Tk):
         self.transparent_frame_position_index = 0
         self.settings_manager = SettingsManager()
         self.tips_manager = TipsManager()
-        self.time_options_manager = TimeOptionsManager()
+        self.time_options_manager = TimeSettingsManager()
         self.mobber_manager = MobberManager(self.settings_manager.get_randomize_randomize_next_driver())
         self.countdown_manager = CountdownManager(self)
         self.session_manager = SessionManager(uuid)
