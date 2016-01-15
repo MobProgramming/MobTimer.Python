@@ -1,5 +1,6 @@
 import os
 
+from Infrastructure.PathUtility import PathUtility
 from Infrastructure.FileUtilities import FileUtilities
 
 
@@ -15,7 +16,7 @@ class SessionManager(object):
         file = open(directory + session_id.__str__(), 'w+')
 
     def get_sessions_path(self):
-        directory = FileUtilities.get_root_path() + "\\Sessions\\"
+        directory = (FileUtilities.get_root_path() + "/Sessions/")
         if not os.path.exists(directory):
             os.makedirs(directory)
         return directory

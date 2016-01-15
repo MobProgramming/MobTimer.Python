@@ -2,9 +2,6 @@ import random
 from tkinter import *
 from tkinter import ttk
 from Infrastructure.ImageUtility import ImageUtility
-from PIL import Image
-from PIL import ImageTk
-
 TAGNAME_CURRENT_MOBBER = 'current_mobber'
 
 
@@ -48,7 +45,6 @@ class ScreenBlockerFrame(ttk.Frame):
 
     def toggle_geometry(self, event):
         geom = self.controller.winfo_geometry()
-        print(geom, self._geom)
         self.controller.geometry(self._geom)
         self._geom = geom
 
@@ -67,8 +63,6 @@ class ScreenBlockerFrame(ttk.Frame):
 
     def build_window_content(self):
 
-
-
         center_frame = ttk.Frame(self)
 
         center_frame.grid(row=0, column=0)
@@ -78,13 +72,11 @@ class ScreenBlockerFrame(ttk.Frame):
         center_frame.grid_columnconfigure(3, weight=0)
         center_frame.grid_columnconfigure(4, weight=1)
 
-
-
         row_index = 0
 
         if self.settings_manager.get_general_use_logo_image():
             self.image_utility = ImageUtility(self.theme_manager)
-            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(),800,200,self.settings_manager.get_general_auto_theme_logo())
+            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(), 800, 200, self.settings_manager.get_general_auto_theme_logo())
             title = ttk.Label(center_frame, image=self.background_image)
         else:
             title = ttk.Label(center_frame, text="Mobbing Timer", font="Helvetica 60 bold italic")
@@ -137,7 +129,7 @@ class ScreenBlockerFrame(ttk.Frame):
         remove_mobber_button = ttk.Button(center_frame, text="Remove Mobber")
         remove_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
         remove_mobber_button.bind("<Button-1>", lambda event: self.mobber_manager.remove_mobber(
-            int(self.names_list.index(self.names_list.selection()))))
+                int(self.names_list.index(self.names_list.selection()))))
         self.controller.bind("<Delete>", self.remove_mobber_if_screen_blocking)
         row_index += 1
 
@@ -186,7 +178,7 @@ class ScreenBlockerFrame(ttk.Frame):
 
         self.focus_mobber_entry()
 
-    def remove_mobber_if_screen_blocking(self,event):
+    def remove_mobber_if_screen_blocking(self, event):
         if self.controller.last_frame == ScreenBlockerFrame:
             self.mobber_manager.remove_mobber(int(self.names_list.index(self.names_list.selection())))
 
@@ -207,7 +199,7 @@ class ScreenBlockerFrame(ttk.Frame):
         selected_index = int(int(self.names_list.index(selected_items)))
         self.mobber_manager.move_mobber_down(selected_index)
         self.names_list.selection_set(
-            self.names_list.get_children()[(selected_index + 1) % self.mobber_manager.mobber_count()])
+                self.names_list.get_children()[(selected_index + 1) % self.mobber_manager.mobber_count()])
 
     def move_mobber_up_left_click(self, event):
         selected_index = int(int(self.names_list.index(self.names_list.selection())))

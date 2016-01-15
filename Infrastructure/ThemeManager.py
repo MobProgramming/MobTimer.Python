@@ -6,10 +6,10 @@ class ThemeManager(object):
     THEME_SETTINGS = 'THEME SETTINGS'
 
     def __init__(self):
-        self.background_color = "white"
-        self.button_color = "white"
-        self.text_color = "white"
-        self.highlight_color = "white"
+        self.background_color = "#FFFFFF"
+        self.button_color = "#FFFFFF"
+        self.text_color = "#000000"
+        self.highlight_color = "#aaaaaa"
 
     def set_theme(self, theme_name):
         cfg_file = "Themes/{}.cfg".format(theme_name)

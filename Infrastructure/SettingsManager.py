@@ -65,11 +65,17 @@ class SettingsManager(object):
     def get_general_logo_image_name(self):
         return self.general_settings_.get("logo image name", 'none')
 
-    def get_general_minutes(self):
+    def get_timer_minutes(self):
         return self.timer_settings_.getint("minutes", 10)
 
-    def get_general_seconds(self):
+    def get_timer_seconds(self):
         return self.timer_settings_.getint("seconds", 0)
+
+    def get_timer_extension_enabled(self):
+        return self.timer_settings_.getboolean("extension enabled", False)
+
+    def get_timer_extension_minutes(self):
+        return self.timer_settings_.getint("extension minutes", 2)
 
     def get_general_enable_tips(self):
         return self.general_settings_.getboolean("enable tips", True)
