@@ -130,7 +130,7 @@ class ScreenBlockerFrame(ttk.Frame):
         remove_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
         remove_mobber_button.bind("<Button-1>", lambda event: self.mobber_manager.remove_mobber(
                 int(self.names_list.index(self.names_list.selection()))))
-        self.controller.bind("<Delete>", self.remove_mobber_if_screen_blocking)
+        self.names_list.bind("<Delete>", self.remove_mobber_if_screen_blocking)
         row_index += 1
 
         move_mobber_up_button = ttk.Button(center_frame, text="Move Mobber Up")
