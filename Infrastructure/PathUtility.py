@@ -4,12 +4,11 @@ import sys
 
 class PathUtility(object):
     @staticmethod
-    def normalize_path(path):
-
+    def normalize_path(path, root=sys.argv[0]):
+        path = path.replace('\\', '/')
         if not path.startswith("/"):
             path = "/" + path
-        # if sys.frozen == 'macosx_app':
-        #     path = path + "/Resources/"
-        path = path.replace('\\','/')
-        result = os.path.dirname(sys.argv[0]) + path
-        return result
+        dirname = os.path.dirname(root)
+        path = dirname + path
+        path = path.replace('\\', '/')
+        return path

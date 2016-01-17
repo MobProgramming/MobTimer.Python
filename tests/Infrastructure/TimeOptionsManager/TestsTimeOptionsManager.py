@@ -52,7 +52,7 @@ class TestsTimeOptionsManager(unittest.TestCase):
         time_options_manager.decrement_seconds(1)
         time_options_manager.decrement_seconds()
         result = time_options_manager.get_time_string()
-        self.assertEqual(result, "10:16")
+        self.assertEqual(result, "10:29")
 
     def test_subscribe_to_time_changes(self):
         time_options_manager = TimeSettingsManager()
