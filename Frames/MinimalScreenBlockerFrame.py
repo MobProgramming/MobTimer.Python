@@ -1,6 +1,7 @@
 from datetime import datetime
 from tkinter import ttk, N, E, W
 
+from Infrastructure import MobberManager
 from Infrastructure.ImageUtility import ImageUtility
 from Infrastructure.PathUtility import PathUtility
 
@@ -15,7 +16,7 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         self.controller = controller
         self.countdown_manager = countdown_manager
         self.time_options_manager = time_options_manager
-        self.mobber_manager = mobber_manager
+        self.mobber_manager = mobber_manager        # type: MobberManager
         self.settings_manager = settings_manager
         self.theme_manager = theme_manager
         self.tips_manager = tips_manager
@@ -58,6 +59,7 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         self.current_mobber_label = ttk.Label(center_frame, text="", font="Helvetica 50 bold italic",
                                               style="Highlight.TLabel")
         self.current_mobber_label.grid(row=row_index, column=2, columnspan=1, sticky=(N, W))
+        self.current_mobber_label.bind("<Button-1>", lambda event: self.mobber_manager.switch_next_driver())
 
         self.minions_icon = image_utility.load(PathUtility.normalize_path('images\\minions.png'), 75, 75)
         self.minions_label = ttk.Label(center_frame, image=self.minions_icon)

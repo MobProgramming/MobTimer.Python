@@ -21,8 +21,8 @@ class TimeSettingsManager(object):
         self.seconds = (self.seconds + increment) % 60
         self.fire_time_change_callbacks()
 
-    def decrement_seconds(self, decriment=60):
-        self.seconds = ((self.seconds + decriment) - 15) % 60
+    def decrement_seconds(self, decrement=60):
+        self.seconds = ((self.seconds - decrement) % 60)
         self.fire_time_change_callbacks()
 
     def subscribe_to_timechange(self, time_change_callback):

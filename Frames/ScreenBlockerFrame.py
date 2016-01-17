@@ -55,7 +55,6 @@ class ScreenBlockerFrame(ttk.Frame):
             self.time_options_manager.decrement_minutes()
 
     def mouse_wheel_seconds(self, event):
-
         if event.delta > 0:
             self.time_options_manager.increment_seconds(self.mouse_wheel_seconds_delta)
         else:
