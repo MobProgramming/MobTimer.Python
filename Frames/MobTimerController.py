@@ -29,6 +29,8 @@ class MobTimerController(Tk):
         self.mobber_manager = MobberManager(self.settings_manager.get_randomize_randomize_next_driver())
         self.countdown_manager = CountdownManager(self)
         self.session_manager = SessionManager(uuid)
+        self.timer_extension_count = self.settings_manager.get_timer_extension_count()
+        self.extensions_used = 0
         atexit.register(self.session_manager.clear_sessions)
         if self.session_manager.get_active_sessions().__len__() > 0:
             self.quit_and_destroy_session()
@@ -129,8 +131,11 @@ class MobTimerController(Tk):
     def show_transparent_countdown_frame(self, extend_amount=None):
         if self.show_frame(TransparentCountdownFrame):
             if extend_amount is None:
+                self.extensions_used = 0
                 self.countdown_manager.set_countdown_duration(self.time_options_manager.minutes,
                                                               self.time_options_manager.seconds)
+                for minimal_frame in self.frames[MinimalScreenBlockerFrame]:
+                    minimal_frame.show_extend_time_button()
             else:
                 self.countdown_manager.set_countdown_duration(extend_amount, 0)
             self.set_partial_screen_transparent()
@@ -224,3 +229,12 @@ class MobTimerController(Tk):
         bottom_left_screen = "{}x{}+{}+{}".format(window_width, window_height, self.transparent_frame_position, monitor.y +
                                                   screenheight - window_height)
         self.geometry(bottom_left_screen)
+
+    def rewind_and_extend(self,minutes):
+        self.extensions_used += 1
+        self.mobber_manager.rewind_driver()
+        result = self.show_transparent_countdown_frame(minutes)
+        for minimal_frame in self.frames[MinimalScreenBlockerFrame]:
+            minimal_frame.show_extend_time_button()
+        return result
+

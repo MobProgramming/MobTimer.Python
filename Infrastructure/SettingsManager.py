@@ -77,5 +77,8 @@ class SettingsManager(object):
     def get_timer_extension_minutes(self):
         return self.timer_settings_.getint("extension minutes", 2)
 
+    def get_timer_extension_count(self):
+        return self.timer_settings_.getint("extension count", 2)
+
     def get_general_enable_tips(self):
         return self.general_settings_.getboolean("enable tips", True)

@@ -1,6 +1,5 @@
 from datetime import datetime
 from tkinter import ttk, N, E, W
-
 from Infrastructure import MobberManager
 from Infrastructure.ImageUtility import ImageUtility
 from Infrastructure.PathUtility import PathUtility
@@ -11,13 +10,14 @@ class MinimalScreenBlockerFrame(ttk.Frame):
                  tips_manager, theme_manager,
                  **kwargs):
         super().__init__(master, **kwargs)
-
+        self.showing_extend_time_button = False
         self.master = master
         self.controller = controller
         self.countdown_manager = countdown_manager
         self.time_options_manager = time_options_manager
-        self.mobber_manager = mobber_manager        # type: MobberManager
+        self.mobber_manager = mobber_manager  # type: MobberManager
         self.settings_manager = settings_manager
+
         self.theme_manager = theme_manager
         self.tips_manager = tips_manager
         self.build_window_content()
@@ -45,7 +45,8 @@ class MinimalScreenBlockerFrame(ttk.Frame):
 
         if self.settings_manager.get_general_use_logo_image():
             self.image_utility = ImageUtility(self.theme_manager)
-            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(), 800, 200, self.settings_manager.get_general_auto_theme_logo())
+            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(), 800,
+                                                            200, self.settings_manager.get_general_auto_theme_logo())
             title = ttk.Label(center_frame, image=self.background_image)
         else:
             title = ttk.Label(center_frame, text="Mobbing Timer", font="Helvetica 60 bold italic")
@@ -86,9 +87,10 @@ class MinimalScreenBlockerFrame(ttk.Frame):
 
         if self.settings_manager.get_timer_extension_enabled() and not self.settings_manager.get_randomize_randomize_next_driver():
             minutes = self.settings_manager.get_timer_extension_minutes()
-            extend_time_button = ttk.Button(center_frame, text="Extend Time By {} Minutes".format(minutes))
-            extend_time_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=90, pady=10)
-            extend_time_button.bind("<Button-1>", lambda event: self.rewind_and_extend(minutes))
+            self.extend_time_button = ttk.Button(center_frame, text=self.get_extend_time_button_text())
+            self.extend_time_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=90, pady=10)
+            self.showing_extend_time_button = True
+            self.extend_time_button.bind("<Button-1>", lambda event: self.controller.rewind_and_extend(minutes))
             row_index += 1
 
         setup_button = ttk.Button(center_frame, text="Mob Setup & Time")
@@ -101,9 +103,10 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         quit_button.bind("<Button-1>", lambda event: self.controller.quit_and_destroy_session())
         row_index += 1
 
-    def rewind_and_extend(self,minutes):
-        self.mobber_manager.rewind_driver()
-        return self.controller.show_transparent_countdown_frame(minutes)
+    def get_extend_time_button_text(self):
+        minutes = self.settings_manager.get_timer_extension_minutes()
+        return "Extend Time By {} Minutes ({})".format(minutes,
+                                                       self.controller.timer_extension_count - self.controller.extensions_used)
 
     def mobber_list_change_callback(self, mobber_list, driver_index, navigator_index):
         self.current_mobber_label['text'] = ""
@@ -116,3 +119,11 @@ class MinimalScreenBlockerFrame(ttk.Frame):
                 self.next_mobber_label['text'] = "{}".format(name)
         if self.settings_manager.get_general_enable_tips():
             self.tip_text['text'] = self.tips_manager.get_random_tip()
+
+    def show_extend_time_button(self):
+        if self.settings_manager.get_timer_extension_enabled() and not self.settings_manager.get_randomize_randomize_next_driver():
+            if self.controller.extensions_used < self.controller.timer_extension_count:
+                self.extend_time_button["text"] = self.get_extend_time_button_text()
+                self.extend_time_button.grid()
+            else:
+                self.extend_time_button.grid_remove()
