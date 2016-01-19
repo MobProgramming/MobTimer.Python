@@ -75,7 +75,10 @@ class SettingsManager(object):
         return self.timer_settings_.getboolean("extension enabled", False)
 
     def get_timer_extension_minutes(self):
-        return self.timer_settings_.getint("extension minutes", 2)
+        return self.timer_settings_.getint("extension minutes", 0)
+
+    def get_timer_extension_seconds(self):
+        return self.timer_settings_.getint("extension seconds", 30)
 
     def get_timer_extension_count(self):
         return self.timer_settings_.getint("extension count", 2)

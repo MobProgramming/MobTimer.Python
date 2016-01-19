@@ -87,10 +87,12 @@ class MinimalScreenBlockerFrame(ttk.Frame):
 
         if self.settings_manager.get_timer_extension_enabled() and not self.settings_manager.get_randomize_randomize_next_driver():
             minutes = self.settings_manager.get_timer_extension_minutes()
+            seconds = self.settings_manager.get_timer_extension_seconds()
             self.extend_time_button = ttk.Button(center_frame, text=self.get_extend_time_button_text())
             self.extend_time_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=90, pady=10)
             self.showing_extend_time_button = True
-            self.extend_time_button.bind("<Button-1>", lambda event: self.controller.rewind_and_extend(minutes))
+            self.extend_time_button.bind("<Button-1>",
+                                         lambda event: self.controller.rewind_and_extend(minutes, seconds))
             row_index += 1
 
         setup_button = ttk.Button(center_frame, text="Mob Setup & Time")
@@ -105,7 +107,8 @@ class MinimalScreenBlockerFrame(ttk.Frame):
 
     def get_extend_time_button_text(self):
         minutes = self.settings_manager.get_timer_extension_minutes()
-        return "Extend Time By {} Minutes ({})".format(minutes,
+        seconds = self.settings_manager.get_timer_extension_seconds()
+        return "Extend Time By {:0>2}:{:0>2} ({})".format(minutes, seconds,
                                                        self.controller.timer_extension_count - self.controller.extensions_used)
 
     def mobber_list_change_callback(self, mobber_list, driver_index, navigator_index):

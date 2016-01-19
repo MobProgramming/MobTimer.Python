@@ -128,16 +128,16 @@ class MobTimerController(Tk):
         if self.show_frame(frame):
             self.set_full_screen_always_on_top()
 
-    def show_transparent_countdown_frame(self, extend_amount=None):
+    def show_transparent_countdown_frame(self, extend_minutes=None, extend_seconds=None):
         if self.show_frame(TransparentCountdownFrame):
-            if extend_amount is None:
+            if extend_minutes is None and extend_seconds is None:
                 self.extensions_used = 0
                 self.countdown_manager.set_countdown_duration(self.time_options_manager.minutes,
                                                               self.time_options_manager.seconds)
                 for minimal_frame in self.frames[MinimalScreenBlockerFrame]:
                     minimal_frame.show_extend_time_button()
             else:
-                self.countdown_manager.set_countdown_duration(extend_amount, 0)
+                self.countdown_manager.set_countdown_duration(extend_minutes, extend_seconds)
             self.set_partial_screen_transparent()
 
     def get_current_window_geometry(self):
@@ -230,10 +230,10 @@ class MobTimerController(Tk):
                                                   screenheight - window_height)
         self.geometry(bottom_left_screen)
 
-    def rewind_and_extend(self,minutes):
+    def rewind_and_extend(self,minutes, seconds):
         self.extensions_used += 1
         self.mobber_manager.rewind_driver()
-        result = self.show_transparent_countdown_frame(minutes)
+        result = self.show_transparent_countdown_frame(minutes, seconds)
         for minimal_frame in self.frames[MinimalScreenBlockerFrame]:
             minimal_frame.show_extend_time_button()
         return result
