@@ -1,5 +1,4 @@
 from screeninfo import Monitor, get_monitors
-
 from Infrastructure.PlatformUtility import PlatformUtility
 
 
@@ -18,3 +17,7 @@ class ScreenUtility():
     @staticmethod
     def get_num_monitors(tkroot=None):
         return ScreenUtility.get_monitors_or_default(tkroot).__len__()
+
+    @staticmethod
+    def get_expected_height():
+        return 1200

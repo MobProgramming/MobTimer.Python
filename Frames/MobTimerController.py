@@ -2,9 +2,9 @@ import atexit
 import os
 import uuid
 from tkinter import *
-from tkinter import ttk
 
 from Frames.MinimalScreenBlockerFrame import MinimalScreenBlockerFrame
+from Frames.OuterFrame import OuterFrame
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
 from Infrastructure.CountdownManager import CountdownManager
@@ -16,12 +16,6 @@ from Infrastructure.SettingsManager import SettingsManager
 from Infrastructure.ThemeManager import ThemeManager
 from Infrastructure.TimeSettingsManager import TimeSettingsManager
 from Infrastructure.TipsManager import TipsManager
-
-
-class OuterFrame(ttk.Frame):
-    def __init__(self,monitor, parent):
-        super().__init__(parent)
-        self.monitor = monitor
 
 
 class MobTimerController(Tk):

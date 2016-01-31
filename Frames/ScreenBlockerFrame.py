@@ -1,7 +1,11 @@
 import random
+import uuid
 from tkinter import *
 from tkinter import ttk
+
+from Infrastructure import ScreenUtility
 from Infrastructure.ImageUtility import ImageUtility
+
 TAGNAME_CURRENT_MOBBER = 'current_mobber'
 
 
@@ -11,7 +15,7 @@ class ScreenBlockerFrame(ttk.Frame):
                  **kwargs):
         super().__init__(master, **kwargs)
 
-        self.master = master
+        self.master = master  # type : OuterFrame
         self.controller = controller
         self.theme_manager = theme_manager
         self.countdown_manager = countdown_manager
@@ -62,8 +66,8 @@ class ScreenBlockerFrame(ttk.Frame):
 
     def build_window_content(self):
 
-
-        print("heght", self.master['height'])
+        scale = self.master.monitor.height / ScreenUtility.ScreenUtility.get_expected_height()
+        unique_theme = self.theme_manager.get_unique_theme_for_scale(scale)
 
         center_frame = ttk.Frame(self)
 
@@ -78,28 +82,35 @@ class ScreenBlockerFrame(ttk.Frame):
 
         if self.settings_manager.get_general_use_logo_image():
             self.image_utility = ImageUtility(self.theme_manager)
-            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(), 800, 200, self.settings_manager.get_general_auto_theme_logo())
+            background_image_width = int(800 * scale)
+            background_image_height = int(200 * scale)
+            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(),
+                                                            background_image_width,
+                                                            background_image_height,
+                                                            self.settings_manager.get_general_auto_theme_logo())
             title = ttk.Label(center_frame, image=self.background_image)
         else:
-            title = ttk.Label(center_frame, text="Mobbing Timer", font="Helvetica 60 bold italic")
-        title.grid(row=row_index, columnspan=5, padx=30, pady=(70, 10))
+            title = ttk.Label(center_frame, text="Mobbing Timer", style=unique_theme.title_style_id)
+        pad_x_scaled = int(10 * scale)
+        title.grid(row=row_index, columnspan=5, padx=int(30 * scale), pady=(int(70 * scale), pad_x_scaled))
+
         row_index += 1
 
-        title = ttk.Label(center_frame, text="Left Click to Increase, Right Click to Decrease, or mouse wheel",
-                          font="Helvetica 12 bold")
-        title.grid(row=row_index, columnspan=5, padx=30, pady=10)
+        instructions = ttk.Label(center_frame, text="Left Click to Increase, Right Click to Decrease, or mouse wheel",
+                                 style=unique_theme.label_style_id)
+        instructions.grid(row=row_index, columnspan=5, padx=int(30 * scale), pady=pad_x_scaled)
         row_index += 1
 
-        self.label_minutes = ttk.Label(center_frame, text="10", font="Helvetica 180 bold")
+        self.label_minutes = ttk.Label(center_frame, text="10", style=unique_theme.clock_style_id)
         self.label_minutes.grid(row=row_index, column=1, sticky=E)
         self.label_minutes.bind("<Button-1>", lambda event: self.time_options_manager.increment_minutes())
         self.label_minutes.bind("<Button-3>", lambda event: self.time_options_manager.decrement_minutes())
         self.label_minutes.bind("<MouseWheel>", self.mouse_wheel_minutes)
 
-        label_colon = ttk.Label(center_frame, text=":", font="Helvetica 180 bold")
+        label_colon = ttk.Label(center_frame, text=":", style=unique_theme.clock_style_id)
         label_colon.grid(row=row_index, column=2, sticky=N)
 
-        self.label_seconds = ttk.Label(center_frame, text="30", font="Helvetica 180 bold")
+        self.label_seconds = ttk.Label(center_frame, text="30", style=unique_theme.clock_style_id)
         self.label_seconds.grid(row=row_index, column=3, sticky=W)
         self.label_seconds.bind("<Button-1>",
                                 lambda event: self.time_options_manager.increment_seconds(self.click_seconds_delta))
@@ -108,71 +119,72 @@ class ScreenBlockerFrame(ttk.Frame):
         self.label_seconds.bind("<MouseWheel>", self.mouse_wheel_seconds)
         row_index += 1
 
-        self.add_mobber_entry = ttk.Entry(center_frame, style="EntryStyle.TEntry", text="Add Mobber",
-                                          font="Helvetica 16 bold")
-        self.add_mobber_entry.grid(row=row_index, column=1, columnspan=2, sticky=N + E + W, padx=10)
+        self.add_mobber_entry = ttk.Entry(center_frame, style=unique_theme.entry_style_id, font=unique_theme.ttk_entry_style_cannot_specify_a_font_bug)
+        self.add_mobber_entry.grid(row=row_index, column=1, columnspan=2, sticky=N + E + W, padx=pad_x_scaled)
         self.add_mobber_entry.bind("<Return>", self.add_mobber_left_click)
         self.add_mobber_entry.bind("<Control-Return>", lambda event: self.controller.show_transparent_countdown_frame())
 
-        button_pad = (15, 0)
+        button_pad = (int(15 * scale), 0)
 
-        add_mobber_button = ttk.Button(center_frame, text="Add Mobber")
-        add_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=0)
+        add_mobber_button = ttk.Button(center_frame, text="Add Mobber", style=unique_theme.button_style_id)
+        add_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=pad_x_scaled, pady=0)
         add_mobber_button.bind("<Button-1>", self.add_mobber_left_click)
         row_index += 1
 
-        self.names_list = ttk.Treeview(center_frame)
+        self.names_list = ttk.Treeview(center_frame, style=unique_theme.treeview_style_id)
         self.names_list.tag_configure(TAGNAME_CURRENT_MOBBER, background=self.theme_manager.highlight_color,
                                       foreground=self.theme_manager.background_color)
         self.names_list['show'] = 'tree'
-        self.names_list.grid(row=row_index, rowspan=7, columnspan=2, column=1, padx=10, pady=button_pad,
+        self.names_list.grid(row=row_index, rowspan=7, columnspan=2, column=1, padx=pad_x_scaled, pady=button_pad,
                              sticky=N + E + W + S)
 
-        remove_mobber_button = ttk.Button(center_frame, text="Remove Mobber")
-        remove_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+        remove_mobber_button = ttk.Button(center_frame, text="Remove Mobber", style=unique_theme.button_style_id)
+        remove_mobber_button.grid(row=row_index, column=3, sticky=N + E + W, padx=pad_x_scaled, pady=button_pad)
         remove_mobber_button.bind("<Button-1>", lambda event: self.mobber_manager.remove_mobber(
-                int(self.names_list.index(self.names_list.selection()))))
+            int(self.names_list.index(self.names_list.selection()))))
         self.names_list.bind("<Delete>", self.remove_mobber_if_screen_blocking)
         row_index += 1
 
-        move_mobber_up_button = ttk.Button(center_frame, text="Move Mobber Up")
-        move_mobber_up_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+        move_mobber_up_button = ttk.Button(center_frame, text="Move Mobber Up", style=unique_theme.button_style_id)
+        move_mobber_up_button.grid(row=row_index, column=3, sticky=N + E + W, padx=pad_x_scaled, pady=button_pad)
         move_mobber_up_button.bind("<Button-1>", self.move_mobber_up_left_click)
         row_index += 1
 
-        move_mobber_down_button = ttk.Button(center_frame, text="Move Mobber Down")
-        move_mobber_down_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+        move_mobber_down_button = ttk.Button(center_frame, text="Move Mobber Down", style=unique_theme.button_style_id)
+        move_mobber_down_button.grid(row=row_index, column=3, sticky=N + E + W, padx=pad_x_scaled, pady=button_pad)
         move_mobber_down_button.bind("<Button-1>", self.move_mobber_down_left_click)
         row_index += 1
 
-        clear_mobbers_button = ttk.Button(center_frame, text="Clear Mobbers")
-        clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+        clear_mobbers_button = ttk.Button(center_frame, text="Clear Mobbers", style=unique_theme.button_style_id)
+        clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=pad_x_scaled, pady=button_pad)
         clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.clear())
         row_index += 1
 
-        clear_mobbers_button = ttk.Button(center_frame, text="Skip Driver")
-        clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+        clear_mobbers_button = ttk.Button(center_frame, text="Skip Driver", style=unique_theme.button_style_id)
+        clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=pad_x_scaled, pady=button_pad)
         clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.switch_next_driver())
         row_index += 1
 
         if not self.settings_manager.get_randomize_randomize_next_driver():
-            clear_mobbers_button = ttk.Button(center_frame, text="Rewind Driver")
-            clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+            clear_mobbers_button = ttk.Button(center_frame, text="Rewind Driver", style=unique_theme.button_style_id)
+            clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=pad_x_scaled, pady=button_pad)
             clear_mobbers_button.bind("<Button-1>", lambda event: self.mobber_manager.rewind_driver())
         row_index += 1
 
-        clear_mobbers_button = ttk.Button(center_frame, text="Add Team")
-        clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=10, pady=button_pad)
+        clear_mobbers_button = ttk.Button(center_frame, text="Add Team", style=unique_theme.button_style_id)
+        clear_mobbers_button.grid(row=row_index, column=3, sticky=N + E + W, padx=pad_x_scaled, pady=button_pad)
         clear_mobbers_button.bind("<Button-1>", self.add_default_team)
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="Start Mobbing!", style="StartButton.TButton", )
-        start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=10, pady=button_pad)
+        start_button = ttk.Button(center_frame, text="Start Mobbing!", style=unique_theme.start_button_style_id)
+        start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=pad_x_scaled, pady=button_pad)
         start_button.bind("<Button-1>", lambda event: self.controller.show_transparent_countdown_frame())
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="Quit Mobbing")
-        start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=50, pady=button_pad)
+        start_button = ttk.Button(center_frame, text="Quit Mobbing", style=unique_theme.button_style_id)
+        padx_start_button = int(50 * scale)
+        start_button.grid(row=row_index, column=1, columnspan=3, sticky=N + E + W, padx=padx_start_button,
+                          pady=button_pad)
         start_button.bind("<Button-1>", lambda event: self.controller.quit_and_destroy_session())
         row_index += 1
 
@@ -201,7 +213,7 @@ class ScreenBlockerFrame(ttk.Frame):
         selected_index = int(int(self.names_list.index(selected_items)))
         self.mobber_manager.move_mobber_down(selected_index)
         self.names_list.selection_set(
-                self.names_list.get_children()[(selected_index + 1) % self.mobber_manager.mobber_count()])
+            self.names_list.get_children()[(selected_index + 1) % self.mobber_manager.mobber_count()])
 
     def move_mobber_up_left_click(self, event):
         selected_index = int(int(self.names_list.index(self.names_list.selection())))

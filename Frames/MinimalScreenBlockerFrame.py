@@ -3,6 +3,7 @@ from tkinter import ttk, N, E, W
 from Infrastructure import MobberManager
 from Infrastructure.ImageUtility import ImageUtility
 from Infrastructure.PathUtility import PathUtility
+from Infrastructure.ScreenUtility import ScreenUtility
 
 
 class MinimalScreenBlockerFrame(ttk.Frame):
@@ -29,15 +30,20 @@ class MinimalScreenBlockerFrame(ttk.Frame):
         self.current_time_label["text"] = datetime.now().strftime('%Y-%m-%d     %I:%M %p')
 
     def build_window_content(self):
+
+        scale = self.master.monitor.height / ScreenUtility.get_expected_height()
+        unique_theme = self.theme_manager.get_unique_theme_for_scale(scale)
+
+
         center_frame = ttk.Frame(self)
         center_frame.grid()
 
         row_index = 0
 
         image_utility = ImageUtility(self.theme_manager)
-
+        icon_size = int(75*scale)
         invisible_path = PathUtility.normalize_path('images\\invisible.png')
-        self.invisible_icon = image_utility.load(invisible_path)
+        self.invisible_icon = image_utility.load(invisible_path, icon_size, icon_size)
         self.fade_label = ttk.Label(center_frame, image=self.invisible_icon)
         self.fade_label.grid(row=0, column=0, sticky=(N, W))
         self.fade_label.bind("<Enter>", lambda event: self.controller.fade_app())
@@ -45,63 +51,67 @@ class MinimalScreenBlockerFrame(ttk.Frame):
 
         if self.settings_manager.get_general_use_logo_image():
             self.image_utility = ImageUtility(self.theme_manager)
-            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(), 800,
-                                                            200, self.settings_manager.get_general_auto_theme_logo())
+            image_width =int(800*scale)
+            image_height = int(200*scale)
+            self.background_image = self.image_utility.load(self.settings_manager.get_general_logo_image_name(), image_width,
+                                                            image_height, self.settings_manager.get_general_auto_theme_logo())
             title = ttk.Label(center_frame, image=self.background_image)
         else:
-            title = ttk.Label(center_frame, text="Mobbing Timer", font="Helvetica 60 bold italic")
-        title.grid(row=row_index, column=0, columnspan=6, padx=150, pady=10)
+            title = ttk.Label(center_frame, text="Mobbing Timer", style=unique_theme.title_style_id)
+        title_padx = int(150*scale)
+        pad_y = int(10*scale)
+        title.grid(row=row_index, column=0, columnspan=6, padx=title_padx, pady=pad_y)
         row_index += 1
 
-        self.keyboard_icon = image_utility.load(PathUtility.normalize_path('images\\keyboard.png'), 75, 75)
+
+        self.keyboard_icon = image_utility.load(PathUtility.normalize_path('images\\keyboard.png'), icon_size, icon_size)
         self.keyboard_label = ttk.Label(center_frame, image=self.keyboard_icon)
         self.keyboard_label.grid(row=row_index, column=1, sticky=(N, E))
 
-        self.current_mobber_label = ttk.Label(center_frame, text="", font="Helvetica 50 bold italic",
-                                              style="Highlight.TLabel")
+        self.current_mobber_label = ttk.Label(center_frame, text="", style=unique_theme.current_mobber_label_style_id)
         self.current_mobber_label.grid(row=row_index, column=2, columnspan=1, sticky=(N, W))
         self.current_mobber_label.bind("<Button-1>", lambda event: self.mobber_manager.switch_next_driver())
 
-        self.minions_icon = image_utility.load(PathUtility.normalize_path('images\\minions.png'), 75, 75)
+        self.minions_icon = image_utility.load(PathUtility.normalize_path('images\\minions.png'), icon_size, icon_size)
         self.minions_label = ttk.Label(center_frame, image=self.minions_icon)
         self.minions_label.grid(row=row_index, column=3, sticky=(N, E))
 
-        self.next_mobber_label = ttk.Label(center_frame, text="", font="Helvetica 50")
+        self.next_mobber_label = ttk.Label(center_frame, text="", style=unique_theme.next_mobber_label_style_id)
         self.next_mobber_label.grid(row=row_index, column=4, columnspan=1, sticky=(N, W))
         row_index += 1
 
-        start_button = ttk.Button(center_frame, text="Continue Mobbing!", style="StartButton.TButton", )
-        start_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=10, pady=10)
+        start_button = ttk.Button(center_frame, text="Continue Mobbing!", style=unique_theme.start_button_style_id)
+        start_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=pad_y, pady=pad_y)
         start_button.bind("<Button-1>", lambda event: self.controller.show_transparent_countdown_frame())
         row_index += 1
 
         if self.settings_manager.get_general_enable_tips():
-            self.tip_text = ttk.Label(center_frame, text="", font="Helvetica 15 bold", wraplength=500)
-            self.tip_text.grid(row=row_index, column=1, columnspan=4, padx=30, pady=10, sticky=(N))
+            self.tip_text = ttk.Label(center_frame, text="", style=unique_theme.label_style_id, wraplength=500)
+            self.tip_text.grid(row=row_index, column=1, columnspan=4, padx=int(30*scale), pady=pad_y, sticky=(N))
             row_index += 1
 
         if self.settings_manager.get_continue_screen_blocker_show_current_time():
-            self.current_time_label = ttk.Label(center_frame, text="current time", font="Helvetica 15")
-            self.current_time_label.grid(row=row_index, column=1, columnspan=4, padx=30, pady=10, sticky=(N))
+            self.current_time_label = ttk.Label(center_frame, text="current time", style=unique_theme.label_style_id)
+            self.current_time_label.grid(row=row_index, column=1, columnspan=4, padx=int(30*scale), pady=pad_y, sticky=(N))
             row_index += 1
 
         if self.settings_manager.get_timer_extension_enabled() and not self.settings_manager.get_randomize_randomize_next_driver():
             minutes = self.settings_manager.get_timer_extension_minutes()
             seconds = self.settings_manager.get_timer_extension_seconds()
-            self.extend_time_button = ttk.Button(center_frame, text=self.get_extend_time_button_text())
-            self.extend_time_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=90, pady=10)
+            self.extend_time_button = ttk.Button(center_frame, text=self.get_extend_time_button_text(), style=unique_theme.button_style_id)
+            self.extend_time_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=int(90*scale), pady=pad_y)
             self.showing_extend_time_button = True
             self.extend_time_button.bind("<Button-1>",
                                          lambda event: self.controller.rewind_and_extend(minutes, seconds))
             row_index += 1
 
-        setup_button = ttk.Button(center_frame, text="Mob Setup & Time")
-        setup_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=90, pady=10)
+        setup_button = ttk.Button(center_frame, text="Mob Setup & Time",style=unique_theme.button_style_id)
+        setup_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=int(90*scale), pady=pad_y)
         setup_button.bind("<Button-1>", lambda event: self.controller.show_screen_blocker_frame())
         row_index += 1
 
-        quit_button = ttk.Button(center_frame, text="Quit Mobbing")
-        quit_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=90, pady=10)
+        quit_button = ttk.Button(center_frame, text="Quit Mobbing",style=unique_theme.button_style_id)
+        quit_button.grid(row=row_index, column=1, columnspan=4, sticky=N + E + W, padx=int(90*scale), pady=pad_y)
         quit_button.bind("<Button-1>", lambda event: self.controller.quit_and_destroy_session())
         row_index += 1
 
