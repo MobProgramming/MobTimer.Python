@@ -112,7 +112,7 @@ class MobTimerController(Tk):
             self.focus_set()
         self.last_frame = frame_class
 
-        for container in self.containers:
+        for container in self.parent_containers:
             if isinstance(container, Toplevel):
                 if self.frame_is_screen_blocking():
                     container.deiconify()
@@ -173,7 +173,7 @@ class MobTimerController(Tk):
             monitor_string = "{}x{}+{}+{}".format(monitor.width, monitor.height, monitor.x, monitor.y)
             container.master.geometry(monitor_string)
             if not PlatformUtility.platform_is_mac():
-                container.master.wait_visibility(container)  # Mac removing this prevented the issue with the continue screen visibility
+                container.master.wait_visibility(container.master)  # Mac removing this prevented the issue with the continue screen visibility
             container.master.attributes("-alpha", 1)
 
     def set_partial_screen_transparent(self):
