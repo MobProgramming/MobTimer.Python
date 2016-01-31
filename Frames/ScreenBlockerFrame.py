@@ -62,6 +62,9 @@ class ScreenBlockerFrame(ttk.Frame):
 
     def build_window_content(self):
 
+
+        print("heght", self.master['height'])
+
         center_frame = ttk.Frame(self)
 
         center_frame.grid(row=0, column=0)

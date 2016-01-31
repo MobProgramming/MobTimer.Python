@@ -14,3 +14,7 @@ class ScreenUtility():
         else:
             result = get_monitors()
         return result
+
+    @staticmethod
+    def get_num_monitors(tkroot=None):
+        return ScreenUtility.get_monitors_or_default(tkroot).__len__()
