@@ -8,6 +8,7 @@ from Frames.OuterFrame import OuterFrame
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
 from Infrastructure.CountdownManager import CountdownManager
+from Infrastructure.DojoManager import DojoManager
 from Infrastructure.MobberManager import MobberManager
 from Infrastructure.PlatformUtility import PlatformUtility
 from Infrastructure.ScreenUtility import ScreenUtility
@@ -78,6 +79,9 @@ class MobTimerController(Tk):
         self.title("Mob Timer")
         self.bind_all("<Control-Return>", self.launch_transparent_countdown_if_blocking)
         self.time_options_manager.set_countdown_time(self.settings_manager.get_timer_minutes(), self.settings_manager.get_timer_seconds())
+
+        self.dojo_manager = DojoManager(self)
+
 
     def launch_transparent_countdown_if_blocking(self, event):
         if self.frame_is_screen_blocking():

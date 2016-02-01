@@ -13,7 +13,8 @@ class MobberManager(object):
         return self.mobber_list.__len__()
 
     def add_mobber(self, mobber_name):
-        if str(mobber_name).strip() != "":
+        clean_mobber_name = str(mobber_name).strip()
+        if clean_mobber_name != "" and not self.mobber_list.__contains__(clean_mobber_name):
             self.mobber_list.append(mobber_name)
             self.fire_time_change_callbacks()
 
@@ -84,3 +85,4 @@ class MobberManager(object):
                 self.driver_index = mobber_count - 1
         self.update_next_driver_index()
         self.fire_time_change_callbacks()
+

@@ -35,11 +35,15 @@ class ScreenBlockerFrame(ttk.Frame):
         for index in range(0, mobber_list.__len__()):
             tags = ()
             name = mobber_list[index]
-            if index == driver_index:
-                tags = (TAGNAME_CURRENT_MOBBER)
-                name += " <= Current"
-            if index == navigator_index:
-                name += " <= Next"
+            if self.controller.settings_manager.get_dojo_enabled:
+                if self.controller.dojo_manager.station_drivers.__contains__(name):
+                    name += " <= {}".format(self.controller.dojo_manager.station_drivers[name])
+            else:
+                if index == driver_index:
+                    tags = (TAGNAME_CURRENT_MOBBER)
+                    name += " <= Current"
+                if index == navigator_index:
+                    name += " <= Next"
 
             self.names_list.insert('', END, text=name, tags=tags)
 

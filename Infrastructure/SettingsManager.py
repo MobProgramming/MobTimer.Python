@@ -7,6 +7,7 @@ class SettingsManager(object):
     TIMER_SETTINGS = "TIMER SETTINGS"
     CONTINUE_SCREEN_BLOCKER_SETTINGS = "CONTINUE SCREEN BLOCKER SETTINGS"
     SCREEN_BLOCKER_SETTINGS = "SCREEN BLOCKER SETTINGS"
+    CODE_DOJO = "CODE DOJO"
 
     def __init__(self):
         self.config = configparser.ConfigParser()
@@ -16,6 +17,7 @@ class SettingsManager(object):
         self.screen_blocker_settings = self.config[SettingsManager.SCREEN_BLOCKER_SETTINGS]
         self.general_settings_ = self.config[SettingsManager.GENERAL_SETTINGS]
         self.timer_settings_ = self.config[SettingsManager.TIMER_SETTINGS]
+        self.code_dojo = self.config[SettingsManager.CODE_DOJO]
 
     def get_transparent_window_screen_size_percent(self):
         return self.window_settings_.getfloat("size percentage", 0.3)
@@ -85,3 +87,21 @@ class SettingsManager(object):
 
     def get_general_enable_tips(self):
         return self.general_settings_.getboolean("enable tips", True)
+
+    def get_dojo_enabled(self):
+        return self.code_dojo.getboolean("enable dojo mode", False)
+
+    def get_dojo_broker(self):
+        return self.code_dojo.get("broker", "iot.eclipse.org")
+
+    def get_dojo_port(self):
+        return self.code_dojo.getint("port", 1883)
+
+    def get_dojo_mob_station_name(self):
+        return self.code_dojo.get("mob station name", "NewName")
+
+    def get_dojo_session_id(self):
+        return self.code_dojo.get("session id","1337")
+
+    def get_dojo_topic_root(self):
+        return self.code_dojo.get("topic root", "MobTimer")
