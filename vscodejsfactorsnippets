@@ -1,0 +1,10 @@
+anon      - anonymous function template
+cond      - if block template
+export    - single-line export template
+exportObj - object literal export template
+fn        - function declaration template
+iife      - immediately invoked function expression template
+mfn       - object prototype member function template
+proto     - object template with prototype declaration
+require   - require statement template
+strict    - adds 'use strict'; at cursor location
