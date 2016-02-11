@@ -1,0 +1,17 @@
+ctrl+p            - open command pallette, search project files
+alt+left          - return to previous location
+alt+shift+f       - format code
+alt+shift+right   - widen selection scope
+alt+shift+left    - narrow selection scope
+alt+up            - move selected lines up
+alt+down          - move selected lines down
+alt+shift+up      - copy selected lines up
+alt+shift+down    - copy selected lines down
+ctrl+shift+f      - search all project files
+ctrl+tab          - move through recent file list
+ctrl+shift+tab    - move backwards through recent file list
+f12               - rename variable
+ctrl+enter        - insert line below
+ctrl+shift+enter  - insert line above
+ctrl+shift+l      - select all instances of selected text
+ctrl+shift+k      - delete lines
