@@ -30,7 +30,7 @@ class TestsMobberManager(unittest.TestCase):
         mobber_manager = MobberManager()
         mobber_manager.add_mobber("Joe")
         mobber_manager.add_mobber("Chris")
-        mobber_manager.add_mobber("Joe")
+        mobber_manager.add_mobber("John")
         mobber_manager.remove_mobber(2)
         result = ["Joe", "Chris"]
         self.assertEqual(mobber_manager.get_mobbers(), result)
@@ -178,6 +178,7 @@ class TestsMobberManager(unittest.TestCase):
         mobber_manager.switch_next_driver()
         mobber_manager.switch_next_driver()
         mobber_manager.switch_next_driver()
+        mobber_manager.set_mobber_list(["Hello", "Eric", "Joe"])
         mobber_manager.switch_next_driver()
         mobber_manager.switch_next_driver()
         mobber_manager.remove_mobber(2)

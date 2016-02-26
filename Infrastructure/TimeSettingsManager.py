@@ -29,12 +29,12 @@ class TimeSettingsManager(object):
         self.time_change_callbacks.append(time_change_callback)
         self.fire_time_change_callbacks()
 
-    def fire_time_change_callbacks(self):
+    def fire_time_change_callbacks(self, origin_station_name=None):
         for time_change_callback in self.time_change_callbacks:
             if time_change_callback:
-                time_change_callback(self.get_time_string(), self.minutes, self.seconds)
+                time_change_callback(self.get_time_string(), self.minutes, self.seconds, origin_station_name)
 
-    def set_countdown_time(self, minutes, seconds):
+    def set_countdown_time(self, minutes, seconds, origin_station_name=None):
         self.minutes = minutes
         self.seconds = seconds
-        self.fire_time_change_callbacks()
+        self.fire_time_change_callbacks(origin_station_name)

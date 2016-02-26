@@ -16,35 +16,36 @@ class MobberManager(object):
         clean_mobber_name = str(mobber_name).strip()
         if clean_mobber_name != "" and not self.mobber_list.__contains__(clean_mobber_name):
             self.mobber_list.append(mobber_name)
-            self.fire_time_change_callbacks()
+            self.fire_mobber_list_change_callbacks()
 
     def get_mobbers(self):
         return self.mobber_list
 
     def remove_mobber(self, remove_mobber_index):
-        if self.mobber_count() == 0: return
+        if self.mobber_count() == 0:
+            return
         del self.mobber_list[remove_mobber_index]
-        self.fire_time_change_callbacks()
+        self.fire_mobber_list_change_callbacks()
 
     def move_mobber_up(self, swap_index):
         if self.mobber_count() == 0: return
         destination_index = swap_index - 1
         self.mobber_list[swap_index], self.mobber_list[destination_index] = self.mobber_list[destination_index], \
                                                                             self.mobber_list[swap_index]
-        self.fire_time_change_callbacks()
+        self.fire_mobber_list_change_callbacks()
 
     def move_mobber_down(self, swap_index):
         if self.mobber_count() == 0: return
         destination_index = (swap_index + 1) % self.mobber_list.__len__()
         self.mobber_list[swap_index], self.mobber_list[destination_index] = self.mobber_list[destination_index], \
                                                                             self.mobber_list[swap_index]
-        self.fire_time_change_callbacks()
+        self.fire_mobber_list_change_callbacks()
 
     def subscribe_to_mobber_list_change(self, mobber_list_change_callback):
         self.mobber_list_change_callbacks.append(mobber_list_change_callback)
-        self.fire_time_change_callbacks()
+        self.fire_mobber_list_change_callbacks()
 
-    def fire_time_change_callbacks(self):
+    def fire_mobber_list_change_callbacks(self):
         self.update_next_driver_index()
         for mobber_list_change_callback in self.mobber_list_change_callbacks:
             if mobber_list_change_callback:
@@ -52,7 +53,7 @@ class MobberManager(object):
 
     def clear(self):
         self.mobber_list = []
-        self.fire_time_change_callbacks()
+        self.fire_mobber_list_change_callbacks()
 
     def switch_next_driver(self):
         mobber_count = self.mobber_list.__len__()
@@ -61,7 +62,7 @@ class MobberManager(object):
                 self.driver_index = self.next_driver_index
             else:
                 self.driver_index = (self.driver_index + 1) % mobber_count
-        self.fire_time_change_callbacks()
+        self.fire_mobber_list_change_callbacks()
 
     def update_next_driver_index(self):
         mobber_count = self.mobber_list.__len__()
@@ -84,5 +85,14 @@ class MobberManager(object):
             if self.driver_index < 0:
                 self.driver_index = mobber_count - 1
         self.update_next_driver_index()
-        self.fire_time_change_callbacks()
+        self.fire_mobber_list_change_callbacks()
+
+    def set_mobber_list(self, mobber_list):
+        if self.mobber_list != mobber_list:
+            self.mobber_list = []
+            for mobber_name in mobber_list:
+                clean_mobber_name = str(mobber_name).strip()
+                if clean_mobber_name != "" and not self.mobber_list.__contains__(clean_mobber_name):
+                    self.mobber_list.append(mobber_name)
+            self.fire_mobber_list_change_callbacks()
 

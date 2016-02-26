@@ -33,8 +33,8 @@ class MobTimerController(Tk):
         self.timer_extension_count = self.settings_manager.get_timer_extension_count()
         self.extensions_used = 0
         atexit.register(self.session_manager.clear_sessions)
-        if self.session_manager.get_active_sessions().__len__() > 0:
-            self.quit_and_destroy_session()
+        # if self.session_manager.get_active_sessions().__len__() > 0:
+        #     self.quit_and_destroy_session()
 
         self.session_manager.create_session()
         self.iconbitmap(default='time-bomb.ico')
@@ -83,7 +83,7 @@ class MobTimerController(Tk):
         self.dojo_manager = DojoManager(self)
 
 
-    def launch_transparent_countdown_if_blocking(self, event):
+    def launch_transparent_countdown_if_blocking(self, event = None):
         if self.frame_is_screen_blocking():
             self.show_transparent_countdown_frame()
 
@@ -160,6 +160,7 @@ class MobTimerController(Tk):
             container.master.overrideredirect(1)
 
     def set_always_on_top(self):
+        return
         for container in self.containers:
             container.master.wm_attributes("-topmost", True)
             if PlatformUtility.platform_is_mac():
@@ -169,6 +170,7 @@ class MobTimerController(Tk):
             container.master.focus_force()
 
     def set_full_screen_always_on_top(self):
+        return
         self.set_always_on_top()
         self.remove_title_bar()
         self.disable_resizing()

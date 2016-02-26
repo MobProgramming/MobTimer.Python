@@ -47,7 +47,7 @@ class ScreenBlockerFrame(ttk.Frame):
 
             self.names_list.insert('', END, text=name, tags=tags)
 
-    def time_change_callback(self, time, minutes, seconds):
+    def time_change_callback(self, time, minutes, seconds, origin_station_name=None):
         self.label_minutes['text'] = "{0:0>2}".format(minutes)
         self.label_seconds['text'] = "{0:0>2}".format(seconds)
 
@@ -203,11 +203,9 @@ class ScreenBlockerFrame(ttk.Frame):
     def add_default_team(self, event):
         team = self.settings_manager.get_general_team().split(',')
         randomize_team = self.settings_manager.get_randomize_team()
-        self.mobber_manager.clear()
         if randomize_team:
             random.shuffle(team)
-        for member in team:
-            self.mobber_manager.add_mobber(member)
+        self.mobber_manager.set_mobber_list(team)
 
     def focus_mobber_entry(self):
         self.add_mobber_entry.focus_set()

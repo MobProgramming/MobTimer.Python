@@ -58,7 +58,7 @@ class TestsTimeOptionsManager(unittest.TestCase):
         time_options_manager = TimeSettingsManager()
         result = {"result": "time"}
 
-        def time_change_callback(time, minutes, seconds):
+        def time_change_callback(time, minutes, seconds,origin_station_name):
             result["result"] += " " + time
 
         time_options_manager.subscribe_to_timechange(time_change_callback)
@@ -71,7 +71,7 @@ class TestsTimeOptionsManager(unittest.TestCase):
         time_options_manager = TimeSettingsManager()
         result = {"result": "Time Options after Change:", "increment" : 0}
 
-        def time_change_callback(time, minutes, seconds):
+        def time_change_callback(time, minutes, seconds,origin_station_name):
             result["increment"] += 1
             result["result"] += "\n Change " + result["increment"].__str__() + "| " + time
 
