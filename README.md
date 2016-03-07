@@ -1,5 +1,7 @@
 # Mob Programming Timer – Python
 # [Download Now](https://github.com/MobProgramming/MobTimer.Python/releases)
+## How to install and basic use video
+[![MobTimer Install and Tutorial Video](http://img.youtube.com/vi/GxMP8SI6v0k/0.jpg)](http://www.youtube.com/watch?v=GxMP8SI6v0k)
 ## What is Mob Programming?
 All the brilliant people working on the same thing, at the same time, in the same space, and on the same computer. Find out more at the [Mob Programming site]( http://mobprogramming.org/).
 

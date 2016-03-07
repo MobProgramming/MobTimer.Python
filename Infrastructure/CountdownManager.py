@@ -8,7 +8,7 @@ class CountdownManager(object):
         self.minutes = 0
         self.seconds = 0
         self.time_change_callbacks = []
-        self.count_down_total = datetime.timedelta(minutes=10, seconds=0)
+        self.count_down_total = datetime.timedelta(days=-1, minutes=0, seconds=0)
 
         self.root_tk_app = root_tk_app
         self.refresh_timer()

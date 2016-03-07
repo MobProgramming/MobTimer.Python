@@ -160,7 +160,7 @@ class MobTimerController(Tk):
             container.master.overrideredirect(1)
 
     def set_always_on_top(self):
-        return
+
         for container in self.containers:
             container.master.wm_attributes("-topmost", True)
             if PlatformUtility.platform_is_mac():
@@ -170,7 +170,7 @@ class MobTimerController(Tk):
             container.master.focus_force()
 
     def set_full_screen_always_on_top(self):
-        return
+
         self.set_always_on_top()
         self.remove_title_bar()
         self.disable_resizing()
