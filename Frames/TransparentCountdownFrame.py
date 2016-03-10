@@ -6,7 +6,7 @@ from Infrastructure.SettingsManager import SettingsManager
 
 class TransparentCountdownFrame(ttk.Frame):
     def __init__(self, master, controller, time_options_manager, mobber_manager, countdown_manager, settings_manager,
-                 tips_manager,theme_manager,
+                 tips_manager, theme_manager,
                  **kwargs):
         super().__init__(master, **kwargs)
         self.master = master
@@ -18,11 +18,23 @@ class TransparentCountdownFrame(ttk.Frame):
         self.mobber_manager.subscribe_to_mobber_list_change(self.mobber_list_change_callback)
         self.countdown_manager = countdown_manager
         self.countdown_manager.subscribe_to_time_changes(self.update_time_change_callback)
+        self.unobtrusive_mode_enabled = self.settings_manager.get_general_enable_unobtrusive_mode()
+
+
+    def reset_theme_and_continue_mobbing(self):
+        self.controller.show_minimal_screen_blocker_frame()
+        self.controller.theme_manager.reset_flashing_background_colors_to_normal()
 
     def update_time_change_callback(self, days, minutes, seconds):
-        if (days < 0 or minutes < 0 or seconds < 0) and not self.controller.frame_is_screen_blocking():
-            self.controller.show_minimal_screen_blocker_frame()
         self.label_time['text'] = "{0:0>2}:{1:0>2}".format(minutes, seconds)
+        if (days < 0 or minutes < 0 or seconds < 0) and not self.controller.frame_is_screen_blocking():
+            if self.unobtrusive_mode_enabled:
+                self.controller.flash_unobtrusive_transparent_countdown_frame()
+                self.controller.theme_manager.toggle_flashing_background_style()
+                self.label_time['text'] = "Click&Rotate!"
+            else:
+                self.controller.show_minimal_screen_blocker_frame()
+
 
     def mobber_list_change_callback(self, mobber_list, driver_index, navigator_index):
         mobber_count = mobber_list.__len__()
@@ -58,6 +70,12 @@ class TransparentCountdownFrame(ttk.Frame):
         self.label_driver = ttk.Label(self, text=self.get_driver_text(""), font=driver_font)
         self.label_driver.pack()
         row_index += 1
+
+
+        self.bind("<Button-1>", lambda event: self.reset_theme_and_continue_mobbing())
+        self.label_time.bind("<Button-1>", lambda event: self.reset_theme_and_continue_mobbing())
+        self.label_navigator.bind("<Button-1>", lambda event: self.reset_theme_and_continue_mobbing())
+        self.label_driver.bind("<Button-1>", lambda event: self.reset_theme_and_continue_mobbing())
 
     def get_navigator_text(self, name):
         return "Next: " + name

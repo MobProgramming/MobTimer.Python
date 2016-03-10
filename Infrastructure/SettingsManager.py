@@ -88,6 +88,9 @@ class SettingsManager(object):
     def get_general_enable_tips(self):
         return self.general_settings_.getboolean("enable tips", True)
 
+    def get_general_enable_unobtrusive_mode(self):
+        return self.general_settings_.getboolean("enable unobtrusive mode", False)
+
     def get_dojo_enabled(self):
         return self.code_dojo.getboolean("enable dojo mode", False)
 

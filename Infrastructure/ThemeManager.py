@@ -28,6 +28,24 @@ class ThemeManager(object):
         self.button_color = "#FFFFFF"
         self.text_color = "#000000"
         self.highlight_color = "#aaaaaa"
+        self.normal_background_flash_color = True
+
+    def toggle_flashing_background_style(self):
+        style = ttk.Style()
+        style.theme_use('default')
+        self.normal_background_flash_color = not self.normal_background_flash_color
+        if self.normal_background_flash_color:
+            style.configure('TFrame', background= self.background_color)
+            style.configure('TLabel', background=self.background_color, foreground=self.text_color)
+        else:
+            style.configure('TFrame', background= self.highlight_color)
+            style.configure('TLabel', background=self.highlight_color, foreground=self.background_color)
+
+    def reset_flashing_background_colors_to_normal(self):
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure('TFrame', background= self.background_color)
+        style.configure('TLabel', background=self.background_color, foreground=self.text_color)
 
     def set_theme(self, theme_name):
         cfg_file = "Themes/{}.cfg".format(theme_name)

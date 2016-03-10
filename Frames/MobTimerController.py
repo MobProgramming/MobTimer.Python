@@ -22,6 +22,7 @@ from Infrastructure.TipsManager import TipsManager
 class MobTimerController(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
+        self.toggle_transparent_frame_position_function = self.toggle_transparent_frame_position_enabled
         self.transparent_frame_monitor_index = 0
         self.transparent_frame_position_index = 0
         self.settings_manager = SettingsManager()
@@ -33,8 +34,8 @@ class MobTimerController(Tk):
         self.timer_extension_count = self.settings_manager.get_timer_extension_count()
         self.extensions_used = 0
         atexit.register(self.session_manager.clear_sessions)
-        # if self.session_manager.get_active_sessions().__len__() > 0:
-        #     self.quit_and_destroy_session()
+        if self.session_manager.get_active_sessions().__len__() > 0:
+            self.quit_and_destroy_session()
 
         self.session_manager.create_session()
         self.iconbitmap(default='time-bomb.ico')
@@ -91,6 +92,8 @@ class MobTimerController(Tk):
         return self.last_frame == ScreenBlockerFrame or self.last_frame == MinimalScreenBlockerFrame
 
     def show_minimal_screen_blocker_frame(self):
+        self.toggle_transparent_frame_position_function = self.toggle_transparent_frame_position_enabled
+        self.theme_manager.reset_flashing_background_colors_to_normal()
         if self.last_frame != MinimalScreenBlockerFrame:
             self.launch_blocking_Frame(MinimalScreenBlockerFrame)
             self.mobber_manager.switch_next_driver()
@@ -122,7 +125,8 @@ class MobTimerController(Tk):
                     container.deiconify()
                 else:
                     container.withdraw()
-
+            container.focus_force()
+            container.focus_set()
         return switched_frames
 
     def show_screen_blocker_frame(self):
@@ -207,22 +211,30 @@ class MobTimerController(Tk):
         for controller in self.containers:
             controller.master.attributes("-alpha", 1)
 
+    def flash_unobtrusive_transparent_countdown_frame(self):
+        self.toggle_transparent_frame_position_function = self.toggle_transparent_frame_position_disabled
+        for container in self.containers:
+            container.master.attributes("-alpha", 1)
+            container.focus_force()
+            container.focus_set()
+
+    def toggle_transparent_frame_position_disabled(self):
+        pass
+
     def toggle_transparent_frame_position(self, e=None):
         if self.state() == "withdrawn":
             return
+        self.toggle_transparent_frame_position_function()
 
+    def toggle_transparent_frame_position_enabled(self):
         monitors = ScreenUtility.get_monitors_or_default(self)
         monitor = monitors[self.transparent_frame_monitor_index]
-
         screenwidth = monitor.width
         screenheight = monitor.height
-
         self.set_always_on_top()
         self.remove_title_bar()
         self.disable_resizing()
-
         size_percentage = self.settings_manager.get_transparent_window_screen_size_percent()
-
         window_width = int(screenwidth * size_percentage)
         window_height = int(screenheight * size_percentage)
         if self.transparent_frame_position_index == 0:
@@ -231,8 +243,8 @@ class MobTimerController(Tk):
         else:
             self.transparent_frame_position = monitor.x + 0
         self.transparent_frame_position_index = (self.transparent_frame_position_index + 1) % 2
-
-        bottom_left_screen = "{}x{}+{}+{}".format(window_width, window_height, self.transparent_frame_position, monitor.y +
+        bottom_left_screen = "{}x{}+{}+{}".format(window_width, window_height, self.transparent_frame_position,
+                                                  monitor.y +
                                                   screenheight - window_height)
         self.geometry(bottom_left_screen)
 
