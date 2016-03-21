@@ -10,10 +10,10 @@ def create_windows_exe():
         file_paths = [f for f in listdir(folder_name) if isfile(join(folder_name, f))]
         return ['{}/{}'.format(folder_name, i) for i in file_paths]
 
+    [os.remove(x) for x in get_file_paths('dist')]
     theme_file_paths = get_file_paths("Themes")
     tips_file_paths = get_file_paths("Tips")
     image_file_paths = get_file_paths("Images")
-    tcl__path = '{}\\tcl\\tcl8.6\\init.tcl'.format(os.path.dirname(sys.executable))
     setup(windows=[{
         "script": 'MobTimer.py',
         "icon_resources": [(1, "time-bomb.ico")]
@@ -22,8 +22,7 @@ def create_windows_exe():
                 ('', ["MobTimer.cfg", "company-logo.png", "time-bomb.ico"]),
                 ('Themes', theme_file_paths),
                 ('Tips', tips_file_paths),
-                ('Images', image_file_paths),
-                tcl__path]
+                ('Images', image_file_paths)]
             , requires=['screeninfo'])
 
 def create_mac_app():
