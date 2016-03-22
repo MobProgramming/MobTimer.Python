@@ -38,7 +38,9 @@ class MobTimerController(Tk):
             self.quit_and_destroy_session()
 
         self.session_manager.create_session()
-        self.iconbitmap(default='time-bomb.ico')
+        if sys.platform != 'darwin':
+            self.iconbitmap(default='time-bomb.ico')
+
         self.countdown_manager.subscribe_to_time_changes(self.show_screen_blocker_when_session_interupted)
 
         self.theme_manager = ThemeManager()

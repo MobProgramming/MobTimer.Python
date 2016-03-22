@@ -22,8 +22,9 @@ class TransparentCountdownFrame(ttk.Frame):
 
 
     def reset_theme_and_continue_mobbing(self):
-        self.controller.show_minimal_screen_blocker_frame()
-        self.controller.theme_manager.reset_flashing_background_colors_to_normal()
+        if self.unobtrusive_mode_enabled:
+            self.controller.show_minimal_screen_blocker_frame()
+            self.controller.theme_manager.reset_flashing_background_colors_to_normal()
 
     def update_time_change_callback(self, days, minutes, seconds):
         self.label_time['text'] = "{0:0>2}:{1:0>2}".format(minutes, seconds)
