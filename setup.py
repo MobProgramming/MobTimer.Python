@@ -7,8 +7,11 @@ def create_windows_exe():
 
     # Get theme files and store them in a list
     def get_file_paths(folder_name):
-        file_paths = [f for f in listdir(folder_name) if isfile(join(folder_name, f))]
-        return ['{}/{}'.format(folder_name, i) for i in file_paths]
+        if os.path.isdir(folder_name):
+            file_paths = [f for f in listdir(folder_name) if isfile(join(folder_name, f))]
+            return ['{}/{}'.format(folder_name, i) for i in file_paths]
+        else:
+            return []
 
     [os.remove(x) for x in get_file_paths('dist')]
     theme_file_paths = get_file_paths("Themes")
