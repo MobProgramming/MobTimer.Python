@@ -1,0 +1,19 @@
+You can set the mouse wheel seconds delta in the MobTimer.cfg file.
+You can set the mouse click seconds delta delta in the MobTimer.cfg file.
+You can set the transparent window size percentage in the MobTimer.cfg file.
+You can set the transparent window alpha percentage in the MobTimer.cfg file.
+You can set the transparent window count down timer font size in the MobTimer.cfg file.
+You can set the transparent window driver text font size in the MobTimer.cfg file.
+You can set the transparent window next driver text font size in the MobTimer.cfg file.
+You can set the continue screen alpha percentage in the MobTimer.cfg file.
+You can set the continue screen to show current time in the MobTimer.cfg file.
+You can set the theme to Candy, Dark, Foo, Forest, Lava, Pastel, and Sky in the MobTimer.cfg file.
+You can create your own color themes in the Themes folder.
+You can disable these tips in the MobTimer.cfg file.
+You can set your default team with comma delimited names in the MobTimer.cfg file.
+You can enable randomize team in the MobTimer.cfg file.
+You can enable randomize next driver in MobTimer.cfg file.
+You can able your own logo image in the MobTimer.cfg file.
+You can enable unobtrusive mode MobTimer.cfg file. (Instead of blocking the screen, show a small notification that the driver needs to switch)
+You can set the default time in the MobTimer.cfg file.
+You can enable time extensions in the MobTimer.cfg file.
