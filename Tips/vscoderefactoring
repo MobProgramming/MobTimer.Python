@@ -1,0 +1,7 @@
+Convert to Member Function  - converts named function to object prototype function 
+Convert to Named Function   - converts variable-assigned anonymous function to standard named function
+Export Function             - adds export declaration to module for selected function
+Wrap in Condition           - wraps selected code in an if block
+Wrap in Executed Function   - wraps selected code in a function which is invoked on the next line
+Wrap in Function            - wraps selected code in a function declaration
+Wrap if IIFE                - wraps selected code in an immediately invoked function expression
