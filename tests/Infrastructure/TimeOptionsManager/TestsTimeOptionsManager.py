@@ -2,12 +2,15 @@ import os
 import unittest
 
 from approvaltests import Approvals
-from approvaltests.TextDiffReporter import TextDiffReporter
+from approvaltests.GenericDiffReporterFactory import GenericDiffReporterFactory
 
 from Infrastructure.TimeSettingsManager import TimeSettingsManager
 
 
 class TestsTimeOptionsManager(unittest.TestCase):
+    def setUp(self):
+        self.reporter = GenericDiffReporterFactory().get_first_working()
+
     def test_default_time_10_minutes(self):
         time_options_manager = TimeSettingsManager()
         result = time_options_manager.get_time_string()
@@ -93,7 +96,7 @@ class TestsTimeOptionsManager(unittest.TestCase):
         time_options_manager.increment_minutes()
         time_options_manager.set_countdown_time(3, 14)
 
-        Approvals.verify(result["result"], TextDiffReporter())
+        Approvals.verify(result["result"], self.reporter)
 
 if __name__ == '__main__':
     os.environ["APPROVALS_TEXT_DIFF_TOOL"] = "meld"

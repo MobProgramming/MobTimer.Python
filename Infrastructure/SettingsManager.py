@@ -108,3 +108,6 @@ class SettingsManager(object):
 
     def get_dojo_topic_root(self):
         return self.code_dojo.get("topic root", "MobTimer")
+
+    def get_general_enable_unobtrusive_mode_bouncing_screen(self):
+        return self.general_settings_.getboolean("enable unobtrusive mode bouncing screen", False)

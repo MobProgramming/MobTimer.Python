@@ -2,13 +2,14 @@ import os
 import random
 import unittest
 from approvaltests import Approvals
-from approvaltests.TextDiffReporter import TextDiffReporter
+from approvaltests.GenericDiffReporterFactory import GenericDiffReporterFactory
 from Infrastructure.MobberManager import MobberManager
-
-os.environ["APPROVALS_TEXT_DIFF_TOOL"] = "C:\\Program Files\\TortoiseSVN\\bin\\TortoiseMerge.exe"
 
 
 class TestsMobberManager(unittest.TestCase):
+    def setUp(self):
+        self.reporter = GenericDiffReporterFactory().get_first_working()
+
     def test_empty_mobber_manager_has_no_items(self):
         mobber_manager = MobberManager()
         self.assertEqual(mobber_manager.mobber_count(), 0)
@@ -147,7 +148,7 @@ class TestsMobberManager(unittest.TestCase):
         mobber_manager.remove_mobber(0)
         mobber_manager.remove_mobber(0)
 
-        Approvals.verify(result["result"], TextDiffReporter())
+        Approvals.verify(result["result"], self.reporter)
 
     def test_subscribe_to_mobber_list_changes_random(self):
         random.seed(0)
@@ -192,7 +193,7 @@ class TestsMobberManager(unittest.TestCase):
         mobber_manager.remove_mobber(0)
         mobber_manager.remove_mobber(0)
 
-        Approvals.verify(result["result"], TextDiffReporter())
+        Approvals.verify(result["result"], self.reporter)
 
     def test_navigator1_driver0_index(self):
         mobber_manager = MobberManager()

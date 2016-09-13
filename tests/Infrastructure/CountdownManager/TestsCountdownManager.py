@@ -3,12 +3,14 @@ import time
 import unittest
 
 from approvaltests import Approvals
-from approvaltests.TextDiffReporter import TextDiffReporter
+from approvaltests.GenericDiffReporterFactory import GenericDiffReporterFactory
 
 from Infrastructure.CountdownManager import CountdownManager
 
 
 class TestsCountdownManager(unittest.TestCase):
+    def setUp(self):
+        self.reporter = GenericDiffReporterFactory().get_first_working()
 
     def test_set_countdown_timer(self):
         countdown_manager = CountdownManager(None)
@@ -37,7 +39,7 @@ class TestsCountdownManager(unittest.TestCase):
         countdown_manager.set_countdown_duration(853, 32)
         countdown_manager.set_countdown_duration(3, 62)
 
-        Approvals.verify(result["result"], TextDiffReporter())
+        Approvals.verify(result["result"], self.reporter)
 
 
 if __name__ == '__main__':
