@@ -12,9 +12,10 @@ class TipsManager(object):
             random.seed(seed)
 
     def get_random_tip(self):
-        tips_folder = "Tips"
+        tips_folder = self.root_directory+ "/Tips"
         random_file = random.choice(os.listdir("%s" % tips_folder))
-        return "{}: {}" .format(random_file, TipsManager.random_line(PathUtility.normalize_path(tips_folder + "\\" + random_file,self.root_directory)))
+        random_file_path = tips_folder + "\\" + random_file
+        return "{}: {}" .format(random_file, TipsManager.random_line(random_file_path))
 
     @staticmethod
     def random_line(file_name):
