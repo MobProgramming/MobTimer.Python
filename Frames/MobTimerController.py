@@ -2,6 +2,7 @@ import atexit
 import os
 import uuid
 from tkinter import *
+import sys
 
 from Frames.MinimalScreenBlockerFrame import MinimalScreenBlockerFrame
 from Frames.OuterFrame import OuterFrame

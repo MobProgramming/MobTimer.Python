@@ -29,3 +29,7 @@ To add a theme simply copy and existing theme. To use that theme, put the file n
 ## Project Links
 [Trello Kanban Board]( https://trello.com/b/THISIB9Q/mob-programming-timer-python)
 
+# Todo
+* Update to latest version of python
+* Convert to single file distributable
+* Create plugin infrastructure
