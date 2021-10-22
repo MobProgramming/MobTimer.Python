@@ -33,3 +33,7 @@ To add a theme simply copy and existing theme. To use that theme, put the file n
 * Update to latest version of python
 * Convert to single file distributable
 * Create plugin infrastructure
+* Type into the minutes and seconds
+* Clicking Add mobber should redirect cursor to typing next name
+* Flipping the order of next and driver
+* Replace next with navigator
