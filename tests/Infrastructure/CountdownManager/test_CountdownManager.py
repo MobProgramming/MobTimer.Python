@@ -1,5 +1,3 @@
-import datetime
-import time
 import unittest
 
 from approvaltests.approvals import verify
@@ -7,7 +5,7 @@ from approvaltests.approvals import verify
 from Infrastructure.CountdownManager import CountdownManager
 
 
-class test_CountdownManager(unittest.TestCase):
+class TestsCountdownManager(unittest.TestCase):
 
     def test_set_countdown_timer(self):
         countdown_manager = CountdownManager(None)
