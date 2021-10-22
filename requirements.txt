@@ -1,5 +1,5 @@
 approvaltests
-py2exe
+pyinstaller
 pysmb
 paho-mqtt
 pyreadline
