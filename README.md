@@ -29,11 +29,17 @@ To add a theme simply copy and existing theme. To use that theme, put the file n
 ## Project Links
 [Trello Kanban Board]( https://trello.com/b/THISIB9Q/mob-programming-timer-python)
 
+## Build Windows Distributable
+Run BuildMobTimer.py
+
 # Todo
-* Update to latest version of python
-* Convert to single file distributable
-* Create plugin infrastructure
+* Make a distributable version for Windows
+* Choose if to use the trello link or use this list
+* Create plugin infrastructure (to interface with Clockify, etc.)
 * Type into the minutes and seconds
-* Clicking Add mobber should redirect cursor to typing next name
+* Clicking [Add mobber] should redirect cursor to typing next name
 * Flipping the order of next and driver
 * Replace next with navigator
+* Make a new setup for Mac
+* Skipping someone on the timer screen should be a button not clicking the name
+* Consolidate files into a dir for moving to the './dist' folder
