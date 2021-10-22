@@ -12,7 +12,7 @@ class TipsManager(object):
             random.seed(seed)
 
     def go_up_dir(self, root_directory):
-        return "/".join(root_directory.split('/')[:-1])
+        return "/".join(root_directory.split('\\')[:-1])
 
     def get_random_tip(self):
         tips_folder = self.root_directory + "/Tips"
