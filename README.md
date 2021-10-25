@@ -15,7 +15,7 @@ When we started mob programming we originally used a phone timer to time the rot
 - Screen will be blocked when timer runs out
 - Switch the person at the keyboard to the new driver
 - Repeat
-- To stop timer mid session open the exe again
+- To stop timer mid-session, open the exe again
 
 ## Random Tips
 Tips are maintained in the Tips folder. A random file is selected and a random line from the random file is displayed. To add or remove tips simply add or remove files and lines from files.
