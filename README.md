@@ -26,15 +26,10 @@ The Mob timer can be customized by modifying MobTimer.cfg.
 ## Themes
 To add a theme simply copy and existing theme. To use that theme, put the file name of the new theme in the theme attribute in the MobTimer.cfg
 
-## Project Links
-[Trello Kanban Board]( https://trello.com/b/THISIB9Q/mob-programming-timer-python)
-
 ## Build Windows Distributable
 Run BuildMobTimer.py
 
-# Todo
-* Make a distributable version for Windows
-* Choose if to use the trello link or use this list
+# Kanban
 * Create plugin infrastructure (to interface with Clockify, etc.)
 * Type into the minutes and seconds
 * Clicking [Add mobber] should redirect cursor to typing next name
