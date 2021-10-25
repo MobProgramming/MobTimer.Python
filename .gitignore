@@ -153,3 +153,6 @@ fabric.properties
 
 # For approvals
 *.received.txt
+
+#for mob timer sessions
+/Infrastructure/Sessions/
