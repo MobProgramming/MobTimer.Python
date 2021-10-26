@@ -30,11 +30,16 @@ To add a theme simply copy and existing theme. To use that theme, put the file n
 Run BuildMobTimer.py
 
 # Kanban
-* Create plugin infrastructure (to interface with Clockify, etc.)
-* Type into the minutes and seconds
+* Make it easy to track time actually working 
+  * enable/disable time tracking via a config file
+  * define time types in the conf file
+  * log when mobber added and removed
+  * replace continue button with tracking type
+  * Create plugin infrastructure (to interface with Clockify, etc.)
+* Allow typing into the minutes and seconds
 * Clicking [Add mobber] should redirect cursor to typing next name
-* Flipping the order of next and driver
-* Replace next with navigator
+* Flip the order of Next and Driver
+* Replace Next with navigator
 * Make a new setup for Mac
 * Skipping someone on the timer screen should be a button not clicking the name
 * Consolidate files into a dir for moving to the './dist' folder
