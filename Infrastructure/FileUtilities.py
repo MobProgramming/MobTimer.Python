@@ -11,8 +11,7 @@ class FileUtilities(object):
                hasattr(sys, "importers") # old py2exe
                or imp.is_frozen("__main__")) # tools/freeze
 
-    @staticmethod
-    def get_root_path():
+    def get_root_path(self):
         if FileUtilities.main_is_frozen():
             return os.path.dirname(sys.executable)
         return os.path.dirname(os.path.realpath(__file__))
