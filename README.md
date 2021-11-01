@@ -31,8 +31,8 @@ Run BuildMobTimer.py
 
 # Kanban
 * Make it easy to track time actually working 
-  * enable/disable time tracking via a config file
-  * define time types in the conf file
+  * enable/disable time tracking via the config file
+  * define time types in the config file
   * log when mobber added and removed
   * replace continue button with tracking type
   * Create plugin infrastructure (to interface with Clockify, etc.)

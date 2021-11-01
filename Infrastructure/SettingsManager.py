@@ -104,7 +104,7 @@ class SettingsManager(object):
         return self.code_dojo.get("mob station name", "NewName")
 
     def get_dojo_session_id(self):
-        return self.code_dojo.get("session id","1337")
+        return self.code_dojo.get("session id", "1337")
 
     def get_dojo_topic_root(self):
         return self.code_dojo.get("topic root", "MobTimer")
