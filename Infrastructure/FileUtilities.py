@@ -22,3 +22,8 @@ class FileUtilities(object):
     def create_file(self, file_path):
         f = open(file_path, "w")
         f.close()
+
+    def append(self, file_path, data):
+        f = open(file_path, "w+")
+        f.write(data)
+        f.close()

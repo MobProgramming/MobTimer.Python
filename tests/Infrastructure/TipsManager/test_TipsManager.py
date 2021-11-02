@@ -27,6 +27,15 @@ class TestsTipsManage(unittest.TestCase):
         result = tips_manager.get_random_tip()
         self.assertEqual(result, 'TestTips.txt: Customer collaboration over contract negotiation\n')
 
+    def test_random_tip_from_file_second_alternate_slashes(self):
+        seed = 1
+        dirname = os.path.dirname(__file__)
+        path = self.go_two_dirs_up(dirname) + "\\Tips"
+        path = path.replace("\\", "/")
+        tips_manager = TipsManager(seed, path)
+        result = tips_manager.get_random_tip()
+        self.assertEqual(result, 'TestTips.txt: Customer collaboration over contract negotiation\n')
+
 
 if __name__ == '__main__':
     unittest.main()
