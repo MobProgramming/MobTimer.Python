@@ -9,17 +9,18 @@ class TestsEventLoggingManager(unittest.TestCase):
 
     def test_log_file_should_be_created_if_doesnt_exist(self):
         file_utility = FileUtilities()
-        file_utility.get_root_path = MagicMock(return_value='beginning of file path')
+        beginning_of_file_path = 'beginning of file path'
+        file_utility.get_root_path = MagicMock(return_value=beginning_of_file_path + "\\Infrastructure")
         file_utility.file_exists = MagicMock(return_value=False)
         file_utility.create_file = MagicMock(return_value=True)
 
         EventLoggingManager(file_utility)
 
-        file_utility.create_file.assert_called_with(file_utility.get_root_path() + '\\MobTimerEvents.log')
+        file_utility.create_file.assert_called_with(beginning_of_file_path + '\\MobTimerEvents.log')
 
     def test_log_file_should_not_create_if_file_exists(self):
         file_utility = FileUtilities()
-        file_utility.get_root_path = MagicMock(return_value='beginning of file path')
+        file_utility.get_root_path = MagicMock(return_value='beginning of file path' + '\\Infrastructure')
         file_utility.file_exists = MagicMock(return_value=True)
         file_utility.create_file = MagicMock(return_value=True)
 
@@ -29,7 +30,8 @@ class TestsEventLoggingManager(unittest.TestCase):
 
     def test_log_file_should_append_to_log(self):
         file_utility = FileUtilities()
-        file_utility.get_root_path = MagicMock(return_value='beginning of file path')
+        beginning_of_file_path = 'beginning of file path'
+        file_utility.get_root_path = MagicMock(return_value=beginning_of_file_path + '\\Infrastructure')
         file_utility.file_exists = MagicMock(return_value=True)
         file_utility.create_file = MagicMock(return_value=True)
         file_utility.append = MagicMock()
@@ -42,7 +44,7 @@ class TestsEventLoggingManager(unittest.TestCase):
         calls = []
 
         for entry in test_data:
-            calls.append(call('beginning of file path\\MobTimerEvents.log', '\n'+entry))
+            calls.append(call(beginning_of_file_path +'\\MobTimerEvents.log', '\n'+entry))
 
         file_utility.append.assert_has_calls(calls)
 
