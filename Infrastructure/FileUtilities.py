@@ -28,8 +28,8 @@ class FileUtilities(object):
         f.write(data)
         f.close()
 
-    def go_up_dir(self, root_directory):
+    def go_up_dirs(self, root_directory, levels):
         if '\\' in root_directory:
-            return "/".join(root_directory.split('\\')[:-1])
+            return "/".join(root_directory.split('\\')[:-levels])
         else:
-            return "/".join(root_directory.split('/')[:-1])
+            return "/".join(root_directory.split('/')[:-levels])

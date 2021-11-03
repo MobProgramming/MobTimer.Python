@@ -2,21 +2,16 @@ import os, random
 
 import sys
 
+from Infrastructure.FileUtilities import FileUtilities
 from Infrastructure.PathUtility import PathUtility
 
 
 class TipsManager(object):
     def __init__(self, seed=None, root_directory=sys.argv[0]):
-        self.root_directory = self.go_up_dir(root_directory)
+        self.file_utility = FileUtilities()
+        self.root_directory = self.file_utility.go_up_dirs(root_directory, 1)
         if seed is not None:
             random.seed(seed)
-
-    def go_up_dir(self, root_directory):
-        if '\\' in root_directory:
-            return "/".join(root_directory.split('\\')[:-1])
-        else:
-            return "/".join(root_directory.split('/')[:-1])
-
 
     def get_random_tip(self):
         tips_folder = self.root_directory + "/Tips"
