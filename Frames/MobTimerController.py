@@ -18,6 +18,8 @@ from Infrastructure.SettingsManager import SettingsManager
 from Infrastructure.ThemeManager import ThemeManager
 from Infrastructure.TimeSettingsManager import TimeSettingsManager
 from Infrastructure.TipsManager import TipsManager
+from Infrastructure.EventLoggingManager import EventLoggingManager
+from Infrastructure.FileUtilities import FileUtilities
 
 
 class MobTimerController(Tk):
@@ -32,6 +34,8 @@ class MobTimerController(Tk):
         self.mobber_manager = MobberManager(self.settings_manager.get_randomize_randomize_next_driver())
         self.countdown_manager = CountdownManager(self)
         self.session_manager = SessionManager(uuid)
+        self.file_utilities = FileUtilities()
+        self.event_logging_manager = EventLoggingManager(self.file_utilities)
         self.timer_extension_count = self.settings_manager.get_timer_extension_count()
         self.extensions_used = 0
         atexit.register(self.session_manager.clear_sessions)

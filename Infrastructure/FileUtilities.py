@@ -27,3 +27,9 @@ class FileUtilities(object):
         f = open(file_path, "w+")
         f.write(data)
         f.close()
+
+    def go_up_dir(self, root_directory):
+        if '\\' in root_directory:
+            return "/".join(root_directory.split('\\')[:-1])
+        else:
+            return "/".join(root_directory.split('/')[:-1])
