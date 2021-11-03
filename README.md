@@ -30,10 +30,10 @@ To add a theme simply copy and existing theme. To use that theme, put the file n
 Run BuildMobTimer.py
 
 # Kanban
-* Make it easy to track time actually working 
-  * enable/disable time tracking via the config file
-  * define time types in the config file
+* Make it easy to track time actually working
   * log when mobber added and removed
+  * enable/disable time tracking via the config file
+  * define time types in the config file (Learning Time / Development Time etc...)
   * replace continue button with tracking type
   * Create plugin infrastructure (to interface with Clockify, etc.)
 * Allow typing into the minutes and seconds
