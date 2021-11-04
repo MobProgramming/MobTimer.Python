@@ -7,6 +7,8 @@ class MobberManager(object):
         self.next_driver_index = 1
         self.mobber_list = []
         self.mobber_list_change_callbacks = []
+        self.mobber_add_callbacks = []
+        self.mobber_remove_callbacks = []
         self.randomize = randomize
 
     def mobber_count(self):
@@ -16,7 +18,16 @@ class MobberManager(object):
         clean_mobber_name = str(mobber_name).strip()
         if clean_mobber_name != "" and not self.mobber_list.__contains__(clean_mobber_name):
             self.mobber_list.append(mobber_name)
+            self.fire_mobber_add_callbacks(mobber_name)
             self.fire_mobber_list_change_callbacks()
+
+    def subscribe_to_mobber_add(self, mobber_add_callback):
+        self.mobber_add_callbacks.append(mobber_add_callback)
+
+    def fire_mobber_add_callbacks(self, mobber_name):
+        for mobber_add_callback in self.mobber_add_callbacks:
+            if mobber_add_callback:
+                mobber_add_callback(mobber_name)
 
     def get_mobbers(self):
         return self.mobber_list
@@ -24,8 +35,17 @@ class MobberManager(object):
     def remove_mobber(self, remove_mobber_index):
         if self.mobber_count() == 0:
             return
+        self.fire_mobber_remove_callbacks(self.mobber_list[remove_mobber_index])
         del self.mobber_list[remove_mobber_index]
         self.fire_mobber_list_change_callbacks()
+
+    def subscribe_to_mobber_remove(self, mobber_remove_callback):
+        self.mobber_remove_callbacks.append(mobber_remove_callback)
+
+    def fire_mobber_remove_callbacks(self, mobber_name):
+        for mobber_remove_callback in self.mobber_remove_callbacks:
+            if mobber_remove_callback:
+                mobber_remove_callback(mobber_name)
 
     def move_mobber_up(self, swap_index):
         if self.mobber_count() == 0: return

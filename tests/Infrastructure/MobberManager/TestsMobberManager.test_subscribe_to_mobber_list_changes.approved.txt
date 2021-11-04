@@ -1,27 +1,39 @@
 Mobbers in List for Each Change
 Action 1:
-Action 2:Joe (Driver) (Navigator), 
-Action 3:Joe (Driver), Chris (Navigator), 
-Action 4:Joe (Driver), Chris (Navigator), Sam, 
-Action 5:Joe (Driver), Chris (Navigator), Sam, John, 
-Action 6:Joe, Chris (Driver), Sam (Navigator), John, 
-Action 7:Joe, Chris (Driver), Sam (Navigator), John, Bill, 
-Action 8:Joe, Chris, Sam (Driver), John (Navigator), Bill, 
-Action 9:Joe, Chris, Sam, John (Driver), Bill (Navigator), 
-Action 10:Joe (Navigator), Chris, Sam, John, Bill (Driver), 
-Action 11:Joe (Driver), Chris (Navigator), Sam, John, Bill, 
+Action 2:Joe added
+Action 3:Joe (Driver) (Navigator), 
+Action 4:Chris added
+Action 5:Joe (Driver), Chris (Navigator), 
+Action 6:Sam added
+Action 7:Joe (Driver), Chris (Navigator), Sam, 
+Action 8:John added
+Action 9:Joe (Driver), Chris (Navigator), Sam, John, 
+Action 10:Joe, Chris (Driver), Sam (Navigator), John, 
+Action 11:Bill added
 Action 12:Joe, Chris (Driver), Sam (Navigator), John, Bill, 
-Action 13:Joe, Chris (Driver), John (Navigator), Bill, 
-Action 14:Chris, John (Driver), Bill (Navigator), 
-Action 15:Chris (Navigator), John, Bill (Driver), 
-Action 16:Chris, John (Driver), Bill (Navigator), 
-Action 17:Chris, John (Driver), Bill (Navigator), Seth, 
-Action 18:Chris (Driver), John (Navigator), Bill, Seth, 
-Action 19:Chris (Navigator), John, Bill, Seth (Driver), 
-Action 20:Chris, John, Bill (Driver), Seth (Navigator), 
-Action 21:John, Chris, Bill (Driver), Seth (Navigator), 
-Action 22:John, Chris, Bill (Driver), Seth (Navigator), Fredrick, 
-Action 23:John, Bill, Chris (Driver), Seth (Navigator), Fredrick, 
-Action 24:John, Chris, Seth (Driver), Fredrick (Navigator), 
-Action 25:Chris (Navigator), Seth, Fredrick (Driver), 
-Action 26:Seth (Driver), Fredrick (Navigator), 
+Action 13:Joe, Chris, Sam (Driver), John (Navigator), Bill, 
+Action 14:Joe, Chris, Sam, John (Driver), Bill (Navigator), 
+Action 15:Joe (Navigator), Chris, Sam, John, Bill (Driver), 
+Action 16:Joe (Driver), Chris (Navigator), Sam, John, Bill, 
+Action 17:Joe, Chris (Driver), Sam (Navigator), John, Bill, 
+Action 18:Sam removed
+Action 19:Joe, Chris (Driver), John (Navigator), Bill, 
+Action 20:Joe removed
+Action 21:Chris, John (Driver), Bill (Navigator), 
+Action 22:Chris (Navigator), John, Bill (Driver), 
+Action 23:Chris, John (Driver), Bill (Navigator), 
+Action 24:Seth added
+Action 25:Chris, John (Driver), Bill (Navigator), Seth, 
+Action 26:Chris (Driver), John (Navigator), Bill, Seth, 
+Action 27:Chris (Navigator), John, Bill, Seth (Driver), 
+Action 28:Chris, John, Bill (Driver), Seth (Navigator), 
+Action 29:John, Chris, Bill (Driver), Seth (Navigator), 
+Action 30:Fredrick added
+Action 31:John, Chris, Bill (Driver), Seth (Navigator), Fredrick, 
+Action 32:John, Bill, Chris (Driver), Seth (Navigator), Fredrick, 
+Action 33:Bill removed
+Action 34:John, Chris, Seth (Driver), Fredrick (Navigator), 
+Action 35:John removed
+Action 36:Chris (Navigator), Seth, Fredrick (Driver), 
+Action 37:Chris removed
+Action 38:Seth (Driver), Fredrick (Navigator), 

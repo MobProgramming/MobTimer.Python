@@ -117,6 +117,19 @@ class TestsMobberManager(unittest.TestCase):
 
         mobber_manager.subscribe_to_mobber_list_change(time_change_callback)
 
+        def on_mobber_add(mobber_name):
+            result["increment"] += 1
+            result["result"] += "Action " + result["increment"].__str__() + ":" + mobber_name + " added\n"
+
+        mobber_manager.subscribe_to_mobber_add(on_mobber_add)
+
+
+        def on_mobber_remove(mobber_name):
+            result["increment"] += 1
+            result["result"] += "Action " + result["increment"].__str__() + ":" + mobber_name + " removed\n"
+
+        mobber_manager.subscribe_to_mobber_remove(on_mobber_remove)
+
         mobber_manager.add_mobber("Joe")
         mobber_manager.add_mobber("Chris")
         mobber_manager.add_mobber("Sam")
