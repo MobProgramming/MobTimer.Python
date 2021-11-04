@@ -31,6 +31,7 @@ Run BuildMobTimer.py
 
 # Kanban
 * Make it easy to track time actually working
+  * Logs should have timestamps
   * log when mobber added and removed
   * enable/disable time tracking via the config file
   * define time types in the config file (Learning Time / Development Time etc...)
