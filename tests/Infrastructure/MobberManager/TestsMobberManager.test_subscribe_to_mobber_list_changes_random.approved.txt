@@ -1,24 +1,47 @@
 Mobbers in List for Each Change
 Action 1:
-Action 2:Joe (Driver) (Next), 
-Action 3:Joe (Driver), Chris (Next), 
-Action 4:Joe (Driver), Chris, Sam (Next), 
-Action 5:Joe (Driver), Chris, Sam, John (Next), 
-Action 6:Joe, Chris (Next), Sam, John (Driver), 
-Action 7:Joe, Chris (Next), Sam, John (Driver), Bill, 
-Action 8:Joe, Chris (Driver), Sam (Next), John, Bill, 
-Action 9:Joe, Chris, Sam (Driver), John (Next), Bill, 
-Action 10:Joe, Chris (Next), Sam, John (Driver), Bill, 
-Action 11:Hello, Eric (Next), Joe, 
-Action 12:Hello, Eric (Driver), Joe (Next), 
-Action 13:Hello, Eric (Next), Joe (Driver), 
-Action 14:Hello (Driver), Eric (Next), 
-Action 15:Eric (Driver) (Next), 
-Action 16:Eric (Driver) (Next), 
-Action 17:Eric (Driver), Seth (Next), 
-Action 18:Seth (Driver), Eric (Next), 
-Action 19:Seth (Driver), Eric, Fredrick (Next), 
-Action 20:Seth (Driver), Fredrick (Next), Eric, 
-Action 21:Seth (Driver), Eric (Next), 
-Action 22:Eric (Driver) (Next), 
-Action 23:
+Action 2:Joe added
+Action 3:Joe (Driver) (Next), 
+Action 4:Chris added
+Action 5:Joe (Driver), Chris (Next), 
+Action 6:Sam added
+Action 7:Joe (Driver), Chris, Sam (Next), 
+Action 8:John added
+Action 9:Joe (Driver), Chris, Sam, John (Next), 
+Action 10:Joe, Chris (Next), Sam, John (Driver), 
+Action 11:Bill added
+Action 12:Joe, Chris (Next), Sam, John (Driver), Bill, 
+Action 13:Joe, Chris (Driver), Sam (Next), John, Bill, 
+Action 14:Joe, Chris, Sam (Driver), John (Next), Bill, 
+Action 15:Joe, Chris (Next), Sam, John (Driver), Bill, 
+Action 16:Joe removed
+Action 17:Chris, Sam (Next), John, Bill (Driver), 
+Action 18:Chris removed
+Action 19:Sam, John (Next), Bill, 
+Action 20:Sam removed
+Action 21:John (Next), Bill (Driver), 
+Action 22:Hello added
+Action 23:John, Bill (Driver), Hello (Next), 
+Action 24:Eric added
+Action 25:John, Bill (Driver), Hello (Next), Eric, 
+Action 26:Joe added
+Action 27:John, Bill (Driver), Hello, Eric (Next), Joe, 
+Action 28:John, Bill (Next), Hello, Eric (Driver), Joe, 
+Action 29:John, Bill (Driver), Hello, Eric, Joe (Next), 
+Action 30:Hello removed
+Action 31:John, Bill (Driver), Eric, Joe (Next), 
+Action 32:John removed
+Action 33:Bill, Eric (Driver), Joe (Next), 
+Action 34:Bill (Next), Eric, Joe (Driver), 
+Action 35:Seth added
+Action 36:Bill, Eric, Joe (Driver), Seth (Next), 
+Action 37:Eric, Bill (Next), Joe (Driver), Seth, 
+Action 38:Fredrick added
+Action 39:Eric (Next), Bill, Joe (Driver), Seth, Fredrick, 
+Action 40:Eric, Joe, Bill (Driver), Seth (Next), Fredrick, 
+Action 41:Joe removed
+Action 42:Eric, Bill, Seth (Driver), Fredrick (Next), 
+Action 43:Eric removed
+Action 44:Bill, Seth (Next), Fredrick (Driver), 
+Action 45:Bill removed
+Action 46:Seth (Driver), Fredrick (Next), 

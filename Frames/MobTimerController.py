@@ -9,6 +9,7 @@ from Frames.OuterFrame import OuterFrame
 from Frames.ScreenBlockerFrame import ScreenBlockerFrame
 from Frames.TransparentCountdownFrame import TransparentCountdownFrame
 from Infrastructure.CountdownManager import CountdownManager
+from Infrastructure.DateTimeUtility import DateTimeUtility
 from Infrastructure.DojoManager import DojoManager
 from Infrastructure.MobberManager import MobberManager
 from Infrastructure.PlatformUtility import PlatformUtility
@@ -31,11 +32,12 @@ class MobTimerController(Tk):
         self.settings_manager = SettingsManager()
         self.tips_manager = TipsManager()
         self.time_options_manager = TimeSettingsManager()
+        self.date_time_utility = DateTimeUtility()
+        self.file_utilities = FileUtilities()
+        self.event_logging_manager = EventLoggingManager(self.file_utilities, self.date_time_utility)
         self.mobber_manager = MobberManager(self.settings_manager.get_randomize_randomize_next_driver())
         self.countdown_manager = CountdownManager(self)
         self.session_manager = SessionManager(uuid)
-        self.file_utilities = FileUtilities()
-        self.event_logging_manager = EventLoggingManager(self.file_utilities)
         self.timer_extension_count = self.settings_manager.get_timer_extension_count()
         self.extensions_used = 0
         atexit.register(self.session_manager.clear_sessions)
@@ -74,7 +76,8 @@ class MobTimerController(Tk):
             container.grid_columnconfigure(0, weight=1)
             for frame_type in self.frame_types:
                 frame_instance = frame_type(container, self, self.time_options_manager, self.mobber_manager,
-                                            self.countdown_manager, self.settings_manager, self.tips_manager, self.theme_manager)
+                                            self.countdown_manager, self.settings_manager, self.tips_manager,
+                                            self.theme_manager)
                 self.frames[frame_type].append(frame_instance)
                 frame_instance.grid(row=0, column=0, sticky=(N, S, E, W))
                 frame_instance.grid_rowconfigure(0, weight=1)
@@ -86,12 +89,22 @@ class MobTimerController(Tk):
         self.transparent_frame_position = 0
         self.title("Mob Timer")
         self.bind_all("<Control-Return>", self.launch_transparent_countdown_if_blocking)
-        self.time_options_manager.set_countdown_time(self.settings_manager.get_timer_minutes(), self.settings_manager.get_timer_seconds())
+        self.time_options_manager.set_countdown_time(self.settings_manager.get_timer_minutes(),
+                                                     self.settings_manager.get_timer_seconds())
 
         self.dojo_manager = DojoManager(self)
 
+        if self.settings_manager.get_event_logging_enabled():
+            self.mobber_manager.subscribe_to_mobber_add(self.add_mobber_callback)
+            self.mobber_manager.subscribe_to_mobber_remove(self.remove_mobber_callback)
 
-    def launch_transparent_countdown_if_blocking(self, event = None):
+    def remove_mobber_callback(self, mobber_name):
+        self.event_logging_manager.log(f'Removed: {mobber_name}')
+
+    def add_mobber_callback(self, mobber_name):
+        self.event_logging_manager.log(f'Added: {mobber_name}')
+
+    def launch_transparent_countdown_if_blocking(self, event=None):
         if self.frame_is_screen_blocking():
             self.show_transparent_countdown_frame()
 
@@ -158,7 +171,7 @@ class MobTimerController(Tk):
 
     def get_current_window_geometry(self):
         return "{0}x{1}+0+0".format(
-                self.winfo_screenwidth(), self.winfo_screenheight())
+            self.winfo_screenwidth(), self.winfo_screenheight())
 
     def disable_resizing(self):
         for container in self.containers:
@@ -190,7 +203,8 @@ class MobTimerController(Tk):
             monitor_string = "{}x{}+{}+{}".format(monitor.width, monitor.height, monitor.x, monitor.y)
             container.master.geometry(monitor_string)
             if not PlatformUtility.platform_is_mac():
-                container.master.wait_visibility(container.master)  # Mac removing this prevented the issue with the continue screen visibility
+                container.master.wait_visibility(
+                    container.master)  # Mac removing this prevented the issue with the continue screen visibility
             container.master.attributes("-alpha", 1)
 
     def set_partial_screen_transparent(self):
@@ -212,7 +226,8 @@ class MobTimerController(Tk):
 
     def fade_app(self):
         for controller in self.containers:
-            controller.master.attributes("-alpha", self.settings_manager.get_continue_screen_blocker_window_alpha_percent())
+            controller.master.attributes("-alpha",
+                                         self.settings_manager.get_continue_screen_blocker_window_alpha_percent())
 
     def unfade_app(self):
         for controller in self.containers:
@@ -255,11 +270,10 @@ class MobTimerController(Tk):
                                                   screenheight - window_height)
         self.geometry(bottom_left_screen)
 
-    def rewind_and_extend(self,minutes, seconds):
+    def rewind_and_extend(self, minutes, seconds):
         self.extensions_used += 1
         self.mobber_manager.rewind_driver()
         result = self.show_transparent_countdown_frame(minutes, seconds)
         for minimal_frame in self.frames[MinimalScreenBlockerFrame]:
             minimal_frame.show_extend_time_button()
         return result
-

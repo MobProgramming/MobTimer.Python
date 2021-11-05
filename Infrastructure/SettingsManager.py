@@ -8,6 +8,7 @@ class SettingsManager(object):
     CONTINUE_SCREEN_BLOCKER_SETTINGS = "CONTINUE SCREEN BLOCKER SETTINGS"
     SCREEN_BLOCKER_SETTINGS = "SCREEN BLOCKER SETTINGS"
     CODE_DOJO = "CODE DOJO"
+    EVENT_LOGGING = "EVENT LOGGING"
 
     def __init__(self):
         self.config = configparser.ConfigParser()
@@ -18,6 +19,7 @@ class SettingsManager(object):
         self.general_settings_ = self.config[SettingsManager.GENERAL_SETTINGS]
         self.timer_settings_ = self.config[SettingsManager.TIMER_SETTINGS]
         self.code_dojo = self.config[SettingsManager.CODE_DOJO]
+        self.event_logging = self.config[SettingsManager.EVENT_LOGGING]
 
     def get_transparent_window_screen_size_percent(self):
         return self.window_settings_.getfloat("size percentage", 0.3)
@@ -108,6 +110,9 @@ class SettingsManager(object):
 
     def get_dojo_topic_root(self):
         return self.code_dojo.get("topic root", "MobTimer")
+
+    def get_event_logging_enabled(self):
+        return self.event_logging.getboolean("enabled", True)
 
     def get_general_enable_unobtrusive_mode_bouncing_screen(self):
         return self.general_settings_.getboolean("enable unobtrusive mode bouncing screen", False)

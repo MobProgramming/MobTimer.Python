@@ -21,6 +21,22 @@ class MobberManager(object):
             self.fire_mobber_add_callbacks(mobber_name)
             self.fire_mobber_list_change_callbacks()
 
+    def remove_mobber(self, remove_mobber_index):
+        if self.mobber_count() == 0:
+            return
+        self.fire_mobber_remove_callbacks(self.mobber_list[remove_mobber_index])
+        del self.mobber_list[remove_mobber_index]
+        self.fire_mobber_list_change_callbacks()
+
+    def set_mobber_list(self, mobber_list):
+        if self.mobber_list != mobber_list:
+            for index in range(0, mobber_list.__len__()):
+                self.remove_mobber(0)
+            for mobber_name in mobber_list:
+                clean_mobber_name = str(mobber_name).strip()
+                if clean_mobber_name != "" and not self.mobber_list.__contains__(clean_mobber_name):
+                    self.add_mobber(clean_mobber_name)
+
     def subscribe_to_mobber_add(self, mobber_add_callback):
         self.mobber_add_callbacks.append(mobber_add_callback)
 
@@ -32,12 +48,7 @@ class MobberManager(object):
     def get_mobbers(self):
         return self.mobber_list
 
-    def remove_mobber(self, remove_mobber_index):
-        if self.mobber_count() == 0:
-            return
-        self.fire_mobber_remove_callbacks(self.mobber_list[remove_mobber_index])
-        del self.mobber_list[remove_mobber_index]
-        self.fire_mobber_list_change_callbacks()
+
 
     def subscribe_to_mobber_remove(self, mobber_remove_callback):
         self.mobber_remove_callbacks.append(mobber_remove_callback)
@@ -107,12 +118,5 @@ class MobberManager(object):
         self.update_next_driver_index()
         self.fire_mobber_list_change_callbacks()
 
-    def set_mobber_list(self, mobber_list):
-        if self.mobber_list != mobber_list:
-            self.mobber_list = []
-            for mobber_name in mobber_list:
-                clean_mobber_name = str(mobber_name).strip()
-                if clean_mobber_name != "" and not self.mobber_list.__contains__(clean_mobber_name):
-                    self.mobber_list.append(mobber_name)
-            self.fire_mobber_list_change_callbacks()
+
 
